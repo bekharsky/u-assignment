@@ -1,6 +1,26 @@
 import React from 'react';
-import { Avatar } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Avatar, Grid, Typography } from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+  avatar: {
+    backgroundColor: theme.palette.secondary.main,
+    marginRight: 12,
+    width: 40,
+    height: 40,
+  },
+  nickname: {
+    fontWeight: 500,
+  },
+}));
 
 export const AgentBar = props => {
-  return <></>;
+  const classes = useStyles(props);
+
+  return (
+    <Grid container direction="row" spacing={0} alignItems="center">
+      <Avatar className={classes.avatar}>A</Avatar>
+      <Typography className={classes.nickname}>Nickname</Typography>
+    </Grid>
+  );
 };

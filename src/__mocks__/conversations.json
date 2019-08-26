@@ -1,0 +1,7 @@
+[
+  { "id": "1", "with_user_id": "2", "unread_message_count": 1 },
+  { "id": "2", "with_user_id": "3", "unread_message_count": 0 },
+  { "id": "3", "with_user_id": "4", "unread_message_count": 0 },
+  { "id": "4", "with_user_id": "5", "unread_message_count": 0 },
+  { "id": "5", "with_user_id": "6", "unread_message_count": 0 }
+]
