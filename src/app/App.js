@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 // import PropTypes from 'prop-types';
 import withRoot from 'withRoot';
@@ -11,21 +11,12 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Badge from '@material-ui/core/Badge';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import Container from '@material-ui/core/Container';
-import { AgentBar } from 'components/agent-bar';
+import { Agent } from 'components/agent';
 import { AgentList } from 'components/agent-list';
 import { MessageList } from 'components/message-list';
 import { TextComposer } from 'components/text-composer';
-import { ChatContext } from 'contexts/chat-context';
+import { ChatContext } from 'contexts';
 import pattern from './img/pattern.png';
-
-import conversations from '__mocks__/conversations';
-import messages from '__mocks__/messages';
-import users from '__mocks__/users';
-import user from '__mocks__/user';
-import me from '__mocks__/me';
 
 const drawerWidth = 240;
 
@@ -35,14 +26,15 @@ const useStyles = makeStyles(theme => ({
     backgroundImage: `url(${pattern})`,
   },
   toolbar: {
-    // paddingRight: theme.spacing(2),
-    // paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
   },
   toolbarIcon: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
+    justifyContent: 'space-between',
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
     ...theme.mixins.toolbar,
   },
   appBar: {
@@ -96,12 +88,6 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(10),
   },
-  container: {
-    display: 'flex',
-    flexDirection: 'column-reverse',
-    overflow: 'auto',
-    maxHeight: '100%',
-  },
 }));
 
 const StyledTextComposer = withStyles(theme => ({
@@ -113,10 +99,20 @@ const StyledTextComposer = withStyles(theme => ({
   },
 }))(TextComposer);
 
+const StyledAgent = withStyles(theme => ({
+  username: {
+    fontWeight: 500,
+  },
+}))(Agent);
+
+/**
+ *
+ * @param {*} props
+ */
 export const Application = props => {
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -126,10 +122,11 @@ export const Application = props => {
     setOpen(false);
   };
 
-  const activeAgent = true;
+  const [convoId, setConvoId] = useState();
+  const [userId, setUserId] = useState();
 
   return (
-    <ChatContext.Provider value={{ conversations, messages, users, user, me }}>
+    <ChatContext.Provider value={{ setConvoId, setUserId }}>
       <div className={classes.root}>
         <AppBar
           position="absolute"
@@ -149,19 +146,13 @@ export const Application = props => {
               <MenuIcon />
             </IconButton>
 
-            {activeAgent ? (
-              <AgentBar />
+            {userId ? (
+              <StyledAgent userId={userId} />
             ) : (
               <Typography className={classes.title}>
                 Choose an agent...
               </Typography>
             )}
-
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
         </AppBar>
 
@@ -173,6 +164,8 @@ export const Application = props => {
           open={open}
         >
           <div className={classes.toolbarIcon}>
+            <Typography>Conversations</Typography>
+
             <IconButton onClick={handleDrawerClose} aria-label="close drawer">
               <ChevronLeftIcon />
             </IconButton>
@@ -184,10 +177,7 @@ export const Application = props => {
         </Drawer>
 
         <main className={classes.content}>
-          <Container className={classes.container}>
-            <MessageList />
-          </Container>
-
+          <MessageList convoId={convoId} />
           <StyledTextComposer />
         </main>
       </div>

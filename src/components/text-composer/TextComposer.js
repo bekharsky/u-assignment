@@ -17,6 +17,10 @@ const useStyles = makeStyles(theme => ({
   sendButton: {},
 }));
 
+/**
+ *
+ * @param {*} props
+ */
 export const TextComposer = props => {
   const classes = useStyles(props);
 

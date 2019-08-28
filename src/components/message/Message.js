@@ -1,17 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, withStyles, styled } from '@material-ui/core/styles';
+import { makeStyles, styled } from '@material-ui/core/styles';
 import { Avatar, Grid, Typography } from '@material-ui/core';
-import { ChatContext } from 'contexts/chat-context';
+import { useApi } from 'hooks';
 
 const useStyles = makeStyles(theme => ({
-  message: {},
-  ownMessage: {},
   messageBody: {
     position: 'relative',
     marginLeft: theme.spacing(2),
   },
-  messageBodyReverse: {
+  ownMessageBody: {
     marginLeft: 0,
     marginRight: theme.spacing(2),
   },
@@ -22,22 +20,22 @@ const useStyles = makeStyles(theme => ({
     whiteSpace: 'nowrap',
     opacity: 0.375,
   },
-  dateTimeReverse: {
+  ownDateTime: {
     left: 'auto',
     right: 0,
   },
 }));
 
-const Bubble = styled('div')(({ theme, isReverse, ...props }) => ({
+const Bubble = styled('div')(({ theme, isReverse, color, ...props }) => ({
   position: 'relative',
   padding: theme.spacing(1),
-  background: theme.palette.primary.lightest,
   borderWidth: 1,
   borderRadius: 4,
   borderTopLeftRadius: isReverse ? 4 : 0,
   borderTopRightRadius: isReverse ? 0 : 4,
   borderStyle: 'solid',
-  borderColor: theme.palette.primary.lighter,
+  background: theme.palette[color].lightest,
+  borderColor: theme.palette[color].lighter,
   '&::before': {
     content: "''",
     display: 'block',
@@ -50,8 +48,8 @@ const Bubble = styled('div')(({ theme, isReverse, ...props }) => ({
     borderStyle: 'solid',
     borderWidth: isReverse ? '11px 11px 0 0' : '0 11px 11px 0',
     borderColor: 'transparent',
-    borderRightColor: !isReverse && theme.palette.primary.lighter,
-    borderTopColor: isReverse && theme.palette.primary.lighter,
+    borderRightColor: !isReverse && theme.palette[color].lighter,
+    borderTopColor: isReverse && theme.palette[color].lighter,
   },
   '&::after': {
     content: "''",
@@ -65,15 +63,25 @@ const Bubble = styled('div')(({ theme, isReverse, ...props }) => ({
     borderStyle: 'solid',
     borderWidth: isReverse ? '10px 10px 0 0' : '0 10px 10px 0',
     borderColor: 'transparent',
-    borderRightColor: !isReverse && theme.palette.primary.lightest,
-    borderTopColor: isReverse && theme.palette.primary.lightest,
+    borderRightColor: !isReverse && theme.palette[color].lightest,
+    borderTopColor: isReverse && theme.palette[color].lightest,
   },
 }));
 
+/**
+ *
+ * @param {*} props
+ */
 export const Message = ({ message, ...props }) => {
   const classes = useStyles(props);
-  const { user, me } = useContext(ChatContext);
-  const isOwn = +message.from_user_id === 1;
+
+  const userId = message.from_user_id;
+  const [{ data, isLoading }] = useApi(`users/${userId}`, {});
+
+  const placeholder = { avatar_url: null, username: 'Loading...' };
+  const user = isLoading ? placeholder : data;
+
+  const isOwn = userId === '1';
 
   return (
     <Grid
@@ -84,19 +92,16 @@ export const Message = ({ message, ...props }) => {
       <Avatar src={user.avatar_url} />
 
       <div
-        className={clsx(
-          classes.messageBody,
-          isOwn && classes.messageBodyReverse
-        )}
+        className={clsx(classes.messageBody, isOwn && classes.ownMessageBody)}
       >
         <Typography
           variant="caption"
-          className={clsx(classes.dateTime, isOwn && classes.dateTimeReverse)}
+          className={clsx(classes.dateTime, isOwn && classes.ownDateTime)}
         >
           {message.created_at}
         </Typography>
 
-        <Bubble isReverse={isOwn}>
+        <Bubble color={isOwn ? 'secondary' : 'primary'} isReverse={isOwn}>
           <Typography>{message.body}</Typography>
         </Bubble>
       </div>
