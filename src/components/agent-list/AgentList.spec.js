@@ -1,5 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import { AgentList } from './AgentList';
 
-export const ChatList = props => {
-  return <></>;
-};
+describe('AgentList', () => {
+  it('renders without crashing', () => {
+    const props = { classes: {} };
+    shallow(<AgentList {...props} />);
+  });
+});

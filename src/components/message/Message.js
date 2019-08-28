@@ -1,8 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { makeStyles, styled } from '@material-ui/core/styles';
-import { Avatar, Grid, Typography } from '@material-ui/core';
+import { format } from 'date-fns';
+import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import { useApi } from 'hooks';
+import { Bubble } from 'components/bubble';
 
 const useStyles = makeStyles(theme => ({
   messageBody: {
@@ -26,57 +31,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Bubble = styled('div')(({ theme, isReverse, color, ...props }) => ({
-  position: 'relative',
-  padding: theme.spacing(1),
-  borderWidth: 1,
-  borderRadius: 4,
-  borderTopLeftRadius: isReverse ? 4 : 0,
-  borderTopRightRadius: isReverse ? 0 : 4,
-  borderStyle: 'solid',
-  background: theme.palette[color].lightest,
-  borderColor: theme.palette[color].lighter,
-  '&::before': {
-    content: "''",
-    display: 'block',
-    position: 'absolute',
-    top: -1,
-    left: isReverse ? 'auto' : -12,
-    right: isReverse ? -12 : 'auto',
-    width: 0,
-    height: 0,
-    borderStyle: 'solid',
-    borderWidth: isReverse ? '11px 11px 0 0' : '0 11px 11px 0',
-    borderColor: 'transparent',
-    borderRightColor: !isReverse && theme.palette[color].lighter,
-    borderTopColor: isReverse && theme.palette[color].lighter,
-  },
-  '&::after': {
-    content: "''",
-    display: 'block',
-    position: 'absolute',
-    top: 0,
-    left: isReverse ? 'auto' : -10,
-    right: isReverse ? -10 : 'auto',
-    width: 0,
-    height: 0,
-    borderStyle: 'solid',
-    borderWidth: isReverse ? '10px 10px 0 0' : '0 10px 10px 0',
-    borderColor: 'transparent',
-    borderRightColor: !isReverse && theme.palette[color].lightest,
-    borderTopColor: isReverse && theme.palette[color].lightest,
-  },
-}));
-
 /**
- *
- * @param {*} props
+ * Conversation message component
+ * @param {Object} {message: Object} props
  */
 export const Message = ({ message, ...props }) => {
   const classes = useStyles(props);
 
   const userId = message.from_user_id;
-  const [{ data, isLoading }] = useApi(`users/${userId}`, {});
+  const endpoint = `users/${userId}`;
+  const [{ data, isLoading }] = useApi(endpoint, {});
 
   const placeholder = { avatar_url: null, username: 'Loading...' };
   const user = isLoading ? placeholder : data;
@@ -98,13 +62,20 @@ export const Message = ({ message, ...props }) => {
           variant="caption"
           className={clsx(classes.dateTime, isOwn && classes.ownDateTime)}
         >
-          {message.created_at}
+          {format(message.datetime, 'MM/dd/yyyy hh:mm:ss a')}
         </Typography>
 
-        <Bubble color={isOwn ? 'secondary' : 'primary'} isReverse={isOwn}>
+        <Bubble isOwn={isOwn}>
           <Typography>{message.body}</Typography>
         </Bubble>
       </div>
     </Grid>
   );
+};
+
+Message.propTypes = {
+  /** Conversation message */
+  message: PropTypes.object.isRequired,
+  /** Classes to extend predefined style */
+  classes: PropTypes.object,
 };

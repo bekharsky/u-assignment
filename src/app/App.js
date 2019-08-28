@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-// import PropTypes from 'prop-types';
-import withRoot from 'withRoot';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,85 +9,15 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { Agent } from 'components/agent';
+import withRoot from 'withRoot';
+import { ChatContext } from 'contexts';
 import { AgentList } from 'components/agent-list';
 import { MessageList } from 'components/message-list';
+import { Agent } from 'components/agent';
 import { TextComposer } from 'components/text-composer';
-import { ChatContext } from 'contexts';
-import pattern from './img/pattern.png';
+import { useStyles } from './useStyles';
 
-const drawerWidth = 240;
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    backgroundImage: `url(${pattern})`,
-  },
-  toolbar: {
-    paddingRight: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    fontWeight: 500,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    position: 'relative',
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(10),
-  },
-}));
-
+// Component shouldn't define own position
 const StyledTextComposer = withStyles(theme => ({
   paper: {
     position: 'absolute',
@@ -99,18 +27,12 @@ const StyledTextComposer = withStyles(theme => ({
   },
 }))(TextComposer);
 
-const StyledAgent = withStyles(theme => ({
-  username: {
-    fontWeight: 500,
-  },
-}))(Agent);
-
 /**
- *
- * @param {*} props
+ * Represents an Application
+ * @param {Object} props
  */
-export const Application = props => {
-  const classes = useStyles();
+const Application = props => {
+  const classes = useStyles(props);
 
   const [open, setOpen] = useState(true);
 
@@ -126,7 +48,7 @@ export const Application = props => {
   const [userId, setUserId] = useState();
 
   return (
-    <ChatContext.Provider value={{ setConvoId, setUserId }}>
+    <ChatContext.Provider value={{ convoId, setConvoId, userId, setUserId }}>
       <div className={classes.root}>
         <AppBar
           position="absolute"
@@ -147,7 +69,7 @@ export const Application = props => {
             </IconButton>
 
             {userId ? (
-              <StyledAgent userId={userId} />
+              <Agent userId={userId} />
             ) : (
               <Typography className={classes.title}>
                 Choose an agent...

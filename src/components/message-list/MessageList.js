@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import { useApi } from 'hooks';
+import { messagesFormatter } from 'formatters';
 import { Message } from 'components/message';
 import { Loading } from 'components/loading';
-import { useApi } from 'hooks';
 
 const useStyles = makeStyles(theme => ({
   messageList: {
@@ -16,8 +18,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 /**
- *
- * @param {*} props
+ * Renders messages for a given conversation
+ * @param {Object} {convoId: number} props
  */
 export const MessageList = ({ convoId, ...props }) => {
   const classes = useStyles(props);
@@ -31,14 +33,17 @@ export const MessageList = ({ convoId, ...props }) => {
   }, [endpoint, doFetch]);
 
   useEffect(() => {
+    // Inverted scrollbar with newest messages at the bottom
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [data]);
+
+  const messages = messagesFormatter(data);
 
   return isLoading ? (
     <Loading />
   ) : (
     <List className={classes.messageList} ref={listRef}>
-      {data.map((message, i) => {
+      {messages.map((message, i) => {
         return (
           <ListItem key={i}>
             <Message message={message} />
@@ -47,4 +52,11 @@ export const MessageList = ({ convoId, ...props }) => {
       })}
     </List>
   );
+};
+
+MessageList.propTypes = {
+  /** Conversation ID to fetch data with */
+  convoId: PropTypes.number.isRequired,
+  /** Classes to extend predefined style */
+  classes: PropTypes.object,
 };

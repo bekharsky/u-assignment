@@ -2,10 +2,17 @@
   "name": "u-assignment",
   "version": "0.0.1",
   "private": true,
+  "author": "Sergey Bekharsky",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alinaki/u-assignment"
+  },
   "dependencies": {
     "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
     "axios": "^0.19.0",
+    "clsx": "^1.0.4",
     "date-fns": "^2.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
@@ -17,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -53,8 +61,11 @@
     ]
   },
   "devDependencies": {
+    "docdash": "^1.1.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "jsdoc": "^3.6.3",
+    "jsdoc-babel": "^0.5.0",
     "react-test-renderer": "^16.9.0"
   }
 }

@@ -1,0 +1,37 @@
+{
+  "tags": {
+    "allowUnknownTags": false
+  },
+  "source": {
+    "include": [
+      "./src/app",
+      "./src/components",
+      "./src/formatters",
+      "./src/hooks",
+      "./src/reducers"
+    ],
+    "includePattern": "",
+    "excludePattern": "(node_modules/|docs)"
+  },
+  "plugins": ["plugins/markdown", "node_modules/jsdoc-babel"],
+  "babel": {
+    "presets": ["@babel/preset-env"],
+    "babelrc": false
+  },
+  "opts": {
+    "template": "node_modules/docdash/",
+    "encoding": "utf8",
+    "destination": "docs/",
+    "recurse": true,
+    "verbose": true,
+    "sort": false
+  },
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false,
+    "sort": false
+  },
+  "docdash": {
+    "sort": false
+  }
+}

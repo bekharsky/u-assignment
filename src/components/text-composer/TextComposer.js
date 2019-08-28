@@ -1,7 +1,11 @@
 import React from 'react';
-// import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Paper, FormControl, Input, IconButton } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = makeStyles(theme => ({
@@ -14,12 +18,11 @@ const useStyles = makeStyles(theme => ({
   input: {
     flexGrow: 1,
   },
-  sendButton: {},
 }));
 
 /**
- *
- * @param {*} props
+ * Message composition form component
+ * @param {Object} props
  */
 export const TextComposer = props => {
   const classes = useStyles(props);
@@ -37,15 +40,16 @@ export const TextComposer = props => {
             />
           </FormControl>
 
-          <IconButton
-            color="primary"
-            onClick={() => {}}
-            className={classes.sendButton} // todo: inactive
-          >
+          <IconButton color="primary" onClick={() => {}}>
             <SendIcon />
           </IconButton>
         </Grid>
       </form>
     </Paper>
   );
+};
+
+TextComposer.propTypes = {
+  /** Classes to extend predefined style */
+  classes: PropTypes.object,
 };

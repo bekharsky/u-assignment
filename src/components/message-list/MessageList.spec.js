@@ -1,5 +1,10 @@
 import React from 'react';
+import { shallow } from 'enzyme';
+import { MessageList } from './MessageList';
 
-export const MessageList = props => {
-  return <></>;
-};
+describe('MessageList', () => {
+  it('renders without crashing', () => {
+    const props = { classes: {} };
+    shallow(<MessageList {...props} />);
+  });
+});

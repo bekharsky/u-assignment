@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { TextComposer } from './TextComposer';
+import { Loading } from './Loading';
 
-describe('TextComposer', () => {
+describe('Loading', () => {
   it('renders without crashing', () => {
     const props = { classes: {} };
-    shallow(<TextComposer {...props} />);
+    shallow(<Loading {...props} />);
   });
 });

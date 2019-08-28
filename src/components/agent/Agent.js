@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { Avatar, Badge, Grid, Typography } from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import { useApi } from 'hooks';
 
 const useStyles = makeStyles(theme => ({
@@ -11,6 +15,7 @@ const useStyles = makeStyles(theme => ({
   },
   username: {
     marginLeft: theme.spacing(2),
+    fontWeight: 'inherit',
   },
 }));
 
@@ -25,7 +30,7 @@ const StyledBadge = withStyles({
  *
  * @param {*} props
  */
-export const Agent = ({ unreadCount, userId, ...props }) => {
+export const Agent = ({ userId, unreadCount, ...props }) => {
   const classes = useStyles(props);
 
   const endpoint = `users/${userId}`;
@@ -35,8 +40,8 @@ export const Agent = ({ unreadCount, userId, ...props }) => {
     doFetch(endpoint);
   }, [endpoint, doFetch]);
 
-  const placeholder = { avatar_url: null, username: 'Loading...' };
-  const user = isLoading ? placeholder : data;
+  const doe = { avatar_url: null, username: 'Loading...' };
+  const user = isLoading ? doe : data;
 
   return (
     <Grid container alignItems="center" wrap="nowrap" className={classes.agent}>
@@ -47,4 +52,13 @@ export const Agent = ({ unreadCount, userId, ...props }) => {
       <Typography className={classes.username}>{user.username}</Typography>
     </Grid>
   );
+};
+
+Agent.propTypes = {
+  /** User ID to fetch with */
+  userId: PropTypes.number.isRequired,
+  /** Unread messages count to show the badge */
+  unreadCount: PropTypes.number,
+  /** Classes to extend predefined style */
+  classes: PropTypes.object,
 };

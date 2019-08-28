@@ -1,3 +1,9 @@
+/**
+ * Add predictable logic to the data fetcing
+ * @param {Object} state
+ * @param {string} action
+ * @returns {Object} Return fetching status and result
+ */
 export const dataFetchReducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_INIT':

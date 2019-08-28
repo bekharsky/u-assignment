@@ -3,11 +3,9 @@ import axios from 'axios';
 import { dataFetchReducer } from 'reducers';
 
 /**
- * Fetch data using the provided API
+ *
  * @param {string} initialUrl
  * @param {any} initialData
- * @returns {Object} Return retrieved data encapsulated in the reducer logic
- * @example const [{ data, isLoading, isError }, doFetch] = useApi('users/1', {});
  */
 export const useApi = (initialUrl, initialData) => {
   const [url, setUrl] = useState(initialUrl);
