@@ -47,6 +47,7 @@ export const useApi = (initialUrl, initialData) => {
 
     fetchData();
 
+    // In case component was unmounted
     return () => {
       didCancel = true;
     };

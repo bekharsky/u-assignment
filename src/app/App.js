@@ -44,8 +44,8 @@ const Application = props => {
     setOpen(false);
   };
 
-  const [convoId, setConvoId] = useState();
-  const [userId, setUserId] = useState();
+  const [convoId, setConvoId] = useState(false);
+  const [userId, setUserId] = useState(false);
 
   return (
     <ChatContext.Provider value={{ convoId, setConvoId, userId, setUserId }}>
@@ -99,7 +99,7 @@ const Application = props => {
         </Drawer>
 
         <main className={classes.content}>
-          <MessageList convoId={convoId} />
+          {convoId && <MessageList convoId={convoId} />}
           <StyledTextComposer />
         </main>
       </div>

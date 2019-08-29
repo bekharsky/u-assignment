@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { useApi } from 'hooks';
+import { Agent } from 'components/agent';
 import { Bubble } from 'components/bubble';
 
 const useStyles = makeStyles(theme => ({
@@ -41,12 +40,8 @@ export const Message = ({ message, ...props }) => {
   const classes = useStyles(props);
 
   const userId = message.from_user_id;
-  const endpoint = `users/${userId}`;
-  const [{ data, isLoading }] = useApi(endpoint, {});
 
-  const placeholder = { avatar_url: null, username: 'Loading...' };
-  const user = isLoading ? placeholder : data;
-
+  // Just an assumption, used to render in the opposite side
   const isOwn = userId === '1';
 
   return (
@@ -55,7 +50,7 @@ export const Message = ({ message, ...props }) => {
       direction={isOwn ? 'row-reverse' : 'row'}
       alignItems="flex-start"
     >
-      <Avatar src={user.avatar_url} />
+      <Agent userId={userId} isAvatar />
 
       <div
         className={clsx(classes.messageBody, isOwn && classes.ownMessageBody)}

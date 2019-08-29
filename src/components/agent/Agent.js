@@ -3,15 +3,20 @@ import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useApi } from 'hooks';
 
 const useStyles = makeStyles(theme => ({
+  agent: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexWrap: 'nowrap',
+  },
   avatar: {
     backgroundColor: theme.palette.secondary.main,
-    width: 40,
-    height: 40,
+    width: theme.spacing(5),
+    height: theme.spacing(5),
   },
   username: {
     marginLeft: theme.spacing(2),
@@ -31,29 +36,34 @@ const StyledBadge = withStyles({
  * @param {Object} props React props
  * @param {number} props.userId User ID to fetch with
  * @param {number} props.unreadCount Unread messages count to show the badge
+ * @param {boolean} props.isAvatar If true, show just an avatar
  * @param {Object} props.classes Classes to extend predefined style
  */
-export const Agent = ({ userId, unreadCount, ...props }) => {
+export const Agent = ({ userId, unreadCount, isAvatar, ...props }) => {
   const classes = useStyles(props);
 
   const endpoint = `users/${userId}`;
-  const [{ data, isLoading }, doFetch] = useApi(endpoint, {});
+  const [{ data, isLoading, isError }, doFetch] = useApi(endpoint, {});
 
   useEffect(() => {
+    // Update user info when used as an active conversation indicator
     doFetch(endpoint);
   }, [endpoint, doFetch]);
 
-  const doe = { avatar_url: null, username: 'Loading...' };
-  const user = isLoading ? doe : data;
+  // John Doe until fetched, nothing personal
+  const doe = { avatar_url: null, username: '' };
+  const user = isLoading || isError ? doe : data;
 
   return (
-    <Grid container alignItems="center" wrap="nowrap" className={classes.agent}>
+    <div className={classes.agent}>
       <StyledBadge badgeContent={unreadCount} color="primary">
         <Avatar className={classes.avatar} src={user.avatar_url} />
       </StyledBadge>
 
-      <Typography className={classes.username}>{user.username}</Typography>
-    </Grid>
+      {!isAvatar && (
+        <Typography className={classes.username}>{user.username}</Typography>
+      )}
+    </div>
   );
 };
 

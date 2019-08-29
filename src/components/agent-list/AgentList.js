@@ -8,19 +8,26 @@ import { useApi } from 'hooks';
 import { convosFormatter } from 'formatters';
 import { Agent } from 'components/agent';
 import { Loading } from 'components/loading';
+import { Error } from 'components/error';
 
 const useStyles = makeStyles();
 
 /**
  * Conversation list component
- * @param {Object} props
+ * @param {Object} props React props
  * @param {Object} props.classes Classes to extend predefined style
  */
 export const AgentList = props => {
   const classes = useStyles(props);
-  const { convoId, setConvoId, setUserId } = useContext(ChatContext);
-  const [{ data, isLoading }] = useApi('conversations', []);
 
+  const { convoId, setConvoId, setUserId } = useContext(ChatContext);
+  const [{ data, isLoading, isError }] = useApi('conversations', []);
+
+  if (isError) {
+    return <Error />;
+  }
+
+  // Newest at the top
   const convos = convosFormatter(data);
 
   return isLoading ? (

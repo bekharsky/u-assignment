@@ -7,6 +7,7 @@ import { useApi } from 'hooks';
 import { messagesFormatter } from 'formatters';
 import { Message } from 'components/message';
 import { Loading } from 'components/loading';
+import { Error } from 'components/error';
 
 const useStyles = makeStyles(theme => ({
   messageList: {
@@ -28,7 +29,7 @@ export const MessageList = ({ convoId, ...props }) => {
   const listRef = useRef();
 
   const endpoint = `conversations/${convoId}/messages`;
-  const [{ data, isLoading }, doFetch] = useApi(endpoint, []);
+  const [{ data, isLoading, isError }, doFetch] = useApi(endpoint, []);
 
   useEffect(() => {
     // Fetch a new conversation by a given ID
@@ -40,6 +41,15 @@ export const MessageList = ({ convoId, ...props }) => {
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [data]);
 
+  if (!convoId) {
+    return null;
+  }
+
+  if (isError) {
+    return <Error />;
+  }
+
+  // Newest at the bottom (inverted scrollbar style)
   const messages = messagesFormatter(data);
 
   return isLoading ? (
