@@ -19,7 +19,9 @@ const useStyles = makeStyles(theme => ({
 
 /**
  * Renders messages for a given conversation
- * @param {Object} {convoId: number} props
+ * @param {Object} props React props
+ * @param {number} props.convoId Conversation ID to fetch with
+ * @param {Object} props.classes Classes to extend predefined style
  */
 export const MessageList = ({ convoId, ...props }) => {
   const classes = useStyles(props);

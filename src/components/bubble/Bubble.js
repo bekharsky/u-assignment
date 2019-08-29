@@ -5,7 +5,10 @@ import { useStyles } from './useStyles';
 
 /**
  * Bubble-style message body frame component
- * @param {Object} {isOwn: boolean, children: Array} props
+ * @param {Object} props React props
+ * @param {boolean} props.isOwn If true, renders with secondary color and opposite direction
+ * @param {Array} props.children React children
+ * @param {Object} props.classes Classes to extend predefined style
  */
 export const Bubble = ({ isOwn, children, ...props }) => {
   const classes = useStyles(props);
@@ -17,7 +20,7 @@ export const Bubble = ({ isOwn, children, ...props }) => {
 };
 
 Bubble.propTypes = {
-  /** If true, render with secondary color and opposite direction */
+  /** If true, renders with secondary color and opposite direction */
   isOwn: PropTypes.bool,
   /** React children */
   children: PropTypes.array.isRequired,

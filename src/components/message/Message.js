@@ -33,7 +33,9 @@ const useStyles = makeStyles(theme => ({
 
 /**
  * Conversation message component
- * @param {Object} {message: Object} props
+ * @param {Object} props React props
+ * @param {Object} props.message Message to show
+ * @param {Object} props.classes Classes to extend predefined style
  */
 export const Message = ({ message, ...props }) => {
   const classes = useStyles(props);

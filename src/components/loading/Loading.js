@@ -14,7 +14,8 @@ const useStyles = makeStyles({
 
 /**
  * Circular loading indicator component
- * @param {Object} props
+ * @param {Object} props React props
+ * @param {Object} props.classes Classes to extend predefined style
  */
 export const Loading = props => {
   const classes = useStyles(props);

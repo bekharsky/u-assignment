@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
 
 /**
  * Message composition form component
- * @param {Object} props
+ * @param {Object} props React props
+ * @param {Object} props.classes Classes to extend predefined style
  */
 export const TextComposer = props => {
   const classes = useStyles(props);

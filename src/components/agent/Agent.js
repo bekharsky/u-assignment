@@ -27,8 +27,11 @@ const StyledBadge = withStyles({
 })(Badge);
 
 /**
- *
- * @param {*} props
+ * Chat agent component
+ * @param {Object} props React props
+ * @param {number} props.userId User ID to fetch with
+ * @param {number} props.unreadCount Unread messages count to show the badge
+ * @param {Object} props.classes Classes to extend predefined style
  */
 export const Agent = ({ userId, unreadCount, ...props }) => {
   const classes = useStyles(props);
