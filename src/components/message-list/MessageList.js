@@ -29,6 +29,7 @@ export const MessageList = ({ convoId, ...props }) => {
   const [{ data, isLoading }, doFetch] = useApi(endpoint, []);
 
   useEffect(() => {
+    // Fetch a new conversation by a given ID
     doFetch(endpoint);
   }, [endpoint, doFetch]);
 

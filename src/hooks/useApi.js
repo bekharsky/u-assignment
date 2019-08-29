@@ -27,6 +27,7 @@ export const useApi = (initialUrl, initialData) => {
 
       try {
         const result = await axios(endpoint).then(result => {
+          // Invalid requests results in an XML with code 200
           if (typeof result.data !== 'string') {
             return result;
           } else {
