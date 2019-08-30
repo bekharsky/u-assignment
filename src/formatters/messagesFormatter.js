@@ -1,5 +1,5 @@
 /**
- * Format (add datetime with timezone) and sort messages in a given conversation by timestamp ascending
+ * Format (add timestamp) and sort messages in a given conversation by timestamp ascending
  * @param {Array} messages
  * @returns {Array}
  */
