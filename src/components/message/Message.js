@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -9,6 +9,14 @@ import { Agent } from 'components/agent';
 import { Bubble } from 'components/bubble';
 
 const useStyles = makeStyles(theme => ({
+  message: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ownMessage: {
+    flexDirection: 'row-reverse',
+  },
   messageBody: {
     position: 'relative',
     marginLeft: theme.spacing(2),
@@ -34,7 +42,6 @@ const useStyles = makeStyles(theme => ({
  * Conversation message component
  * @param {Object} props React props
  * @param {Object} props.message Message to show
- * @param {Object} props.classes Classes to extend predefined style
  */
 export const Message = ({ message, ...props }) => {
   const classes = useStyles(props);
@@ -45,11 +52,7 @@ export const Message = ({ message, ...props }) => {
   const isOwn = userId === '1';
 
   return (
-    <Grid
-      container
-      direction={isOwn ? 'row-reverse' : 'row'}
-      alignItems="flex-start"
-    >
+    <div className={clsx(classes.message, isOwn && classes.ownMessage)}>
       <Agent userId={userId} isAvatar />
 
       <div
@@ -59,20 +62,18 @@ export const Message = ({ message, ...props }) => {
           variant="caption"
           className={clsx(classes.dateTime, isOwn && classes.ownDateTime)}
         >
-          {format(message.datetime, 'MM/dd/yyyy hh:mm:ss a')}
+          {format(parseISO(message.created_at), 'MM/dd/yyyy hh:mm:ss a')}
         </Typography>
 
         <Bubble isOwn={isOwn}>
           <Typography>{message.body}</Typography>
         </Bubble>
       </div>
-    </Grid>
+    </div>
   );
 };
 
 Message.propTypes = {
   /** Conversation message */
   message: PropTypes.object.isRequired,
-  /** Classes to extend predefined style */
-  classes: PropTypes.object,
 };

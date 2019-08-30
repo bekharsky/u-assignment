@@ -1,21 +1,21 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { withStyles } from '@material-ui/core/styles';
-import { Loading } from './Loading';
+import { Fail } from './Fail';
 
-describe('Loading', () => {
+describe('Fail', () => {
   it('renders without crashing with no props', () => {
-    shallow(<Loading />);
+    shallow(<Fail />);
   });
 
   it('should apply custom styles', () => {
-    const StyledLoading = withStyles({
-      loading: {
+    const StyledFail = withStyles({
+      fail: {
         display: 'none',
       },
-    })(Loading);
+    })(Fail);
 
-    const component = mount(<StyledLoading />);
+    const component = mount(<StyledFail />);
 
     const node = component.getDOMNode();
     const display = getComputedStyle(node).getPropertyValue('display');

@@ -7,12 +7,12 @@ export const messagesFormatter = messages => {
   const formattedMessages = messages.map(message => {
     return {
       ...message,
-      datetime: new Date(message.created_at),
+      timestamp: new Date(message.created_at).getTime(),
     };
   });
 
   const sortedMessages = formattedMessages.sort((a, b) => {
-    return a.datetime.getTime() - b.datetime.getTime();
+    return a.timestamp - b.timestamp;
   });
 
   return sortedMessages;

@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { useApi } from 'hooks';
 import { messagesFormatter } from 'formatters';
+import { ChatContext } from 'contexts';
 import { Message } from 'components/message';
 import { Loading } from 'components/loading';
-import { Error } from 'components/error';
+import { Fail } from 'components/fail';
 
 const useStyles = makeStyles(theme => ({
   messageList: {
@@ -21,32 +21,29 @@ const useStyles = makeStyles(theme => ({
 /**
  * Renders messages for a given conversation
  * @param {Object} props React props
- * @param {number} props.convoId Conversation ID to fetch with
- * @param {Object} props.classes Classes to extend predefined style
  */
-export const MessageList = ({ convoId, ...props }) => {
+export const MessageList = props => {
   const classes = useStyles(props);
   const listRef = useRef();
+  const { activeConvo } = useContext(ChatContext);
 
-  const endpoint = `conversations/${convoId}/messages`;
+  const endpoint = activeConvo && `conversations/${activeConvo.id}/messages`;
   const [{ data, isLoading, isError }, doFetch] = useApi(endpoint, []);
 
   useEffect(() => {
-    // Fetch a new conversation by a given ID
+    // Fetch a new conversation when needed
     doFetch(endpoint);
   }, [endpoint, doFetch]);
 
   useEffect(() => {
     // Inverted scrollbar with newest messages at the bottom
-    listRef.current.scrollTop = listRef.current.scrollHeight;
+    if (data.length > 0) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
   }, [data]);
 
-  if (!convoId) {
-    return null;
-  }
-
   if (isError) {
-    return <Error />;
+    return <Fail />;
   }
 
   // Newest at the bottom (inverted scrollbar style)
@@ -65,11 +62,4 @@ export const MessageList = ({ convoId, ...props }) => {
       })}
     </List>
   );
-};
-
-MessageList.propTypes = {
-  /** Conversation ID to fetch data with */
-  convoId: PropTypes.number.isRequired,
-  /** Classes to extend predefined style */
-  classes: PropTypes.object,
 };

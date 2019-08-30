@@ -44,11 +44,11 @@ const Application = props => {
     setOpen(false);
   };
 
-  const [convoId, setConvoId] = useState(false);
-  const [userId, setUserId] = useState(false);
+  // Active conversation to work with
+  const [activeConvo, setActiveConvo] = useState(false);
 
   return (
-    <ChatContext.Provider value={{ convoId, setConvoId, userId, setUserId }}>
+    <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
       <div className={classes.root}>
         <AppBar
           position="absolute"
@@ -68,8 +68,8 @@ const Application = props => {
               <MenuIcon />
             </IconButton>
 
-            {userId ? (
-              <Agent userId={userId} />
+            {activeConvo ? (
+              <Agent userId={activeConvo.with_user_id} />
             ) : (
               <Typography className={classes.title}>
                 Choose an agent...
@@ -99,7 +99,7 @@ const Application = props => {
         </Drawer>
 
         <main className={classes.content}>
-          {convoId && <MessageList convoId={convoId} />}
+          <MessageList />
           <StyledTextComposer />
         </main>
       </div>

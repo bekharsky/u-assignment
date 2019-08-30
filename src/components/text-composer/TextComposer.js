@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -9,6 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = makeStyles(theme => ({
+  textComposer: {},
+  // Mimic Material UI components styling approach
   paper: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
@@ -23,13 +25,12 @@ const useStyles = makeStyles(theme => ({
 /**
  * Message composition form component
  * @param {Object} props React props
- * @param {Object} props.classes Classes to extend predefined style
  */
 export const TextComposer = props => {
   const classes = useStyles(props);
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={clsx(classes.paper, classes.textComposer)}>
       <form action="">
         <Grid container alignItems="center">
           <FormControl className={classes.input}>
@@ -48,9 +49,4 @@ export const TextComposer = props => {
       </form>
     </Paper>
   );
-};
-
-TextComposer.propTypes = {
-  /** Classes to extend predefined style */
-  classes: PropTypes.object,
 };

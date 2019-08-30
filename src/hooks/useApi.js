@@ -6,7 +6,7 @@ import { dataFetchReducer } from 'reducers';
  * Fetch data using the provided API
  * @param {string} initialUrl
  * @param {any} initialData
- * @returns {Object} Return retrieved data encapsulated in the reducer logic
+ * @returns {Array} Return retrieved data encapsulated in the reducer logic alongside with the update function
  * @example const [{ data, isLoading, isError }, doFetch] = useApi('users/1', {});
  */
 export const useApi = (initialUrl, initialData) => {
@@ -22,6 +22,11 @@ export const useApi = (initialUrl, initialData) => {
     let didCancel = false;
 
     const fetchData = async () => {
+      if (!url) {
+        dispatch({ type: 'FETCH_NONE' });
+        return false;
+      }
+
       const endpoint = `${process.env.REACT_APP_API}/${url}`;
       dispatch({ type: 'FETCH_INIT' });
 

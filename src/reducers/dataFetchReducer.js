@@ -6,6 +6,12 @@
  */
 export const dataFetchReducer = (state, action) => {
   switch (action.type) {
+    case 'FETCH_NONE':
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+      };
     case 'FETCH_INIT':
       return {
         ...state,
