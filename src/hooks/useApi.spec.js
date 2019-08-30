@@ -1,6 +1,5 @@
 import React from 'react';
 import { act } from 'react-test-renderer';
-import { act as act2 } from 'react-dom/test-utils';
 import { renderHook } from '@testing-library/react-hooks';
 import { useApi } from './useApi';
 import axios from 'axios';
