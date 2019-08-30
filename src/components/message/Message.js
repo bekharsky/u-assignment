@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { format, parseISO } from 'date-fns';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Agent } from 'components/agent';
 import { Bubble } from 'components/bubble';
@@ -11,8 +10,9 @@ import { Bubble } from 'components/bubble';
 const useStyles = makeStyles(theme => ({
   message: {
     display: 'flex',
+    width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   ownMessage: {
     flexDirection: 'row-reverse',
