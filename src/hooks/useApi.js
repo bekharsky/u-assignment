@@ -27,11 +27,11 @@ export const useApi = (initialUrl, initialData) => {
         return false;
       }
 
-      const endpoint = `${process.env.REACT_APP_API}/${url}`;
+      const endpoint = `${import.meta.env.VITE_API}/${url}`;
       dispatch({ type: 'FETCH_INIT' });
 
       try {
-        const result = await axios(endpoint).then(result => {
+        const result = await axios(endpoint).then((result) => {
           // Invalid requests results in an XML with code 200
           if (typeof result.data !== 'string') {
             return result;
