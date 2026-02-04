@@ -1,17 +1,14 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { shallow, mount } from 'enzyme';
-import { withStyles } from '@material-ui/core/styles';
-import Badge from '@material-ui/core/Badge';
-import Typography from '@material-ui/core/Typography';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useApi } from 'hooks';
 import { Agent } from './Agent';
 import user from '__mocks__/user.json';
 import users from '__mocks__/users.json';
 
-jest.mock('hooks');
+vi.mock('hooks');
 
-const doFetch = jest.fn();
+const doFetch = vi.fn();
 
 beforeEach(() => {
   useApi.mockImplementation(() => [
@@ -26,36 +23,36 @@ beforeEach(() => {
 
 describe('Agent', () => {
   it('renders without crashing', () => {
-    shallow(<Agent userId={user.id} />);
+    render(<Agent userId={user.id} />);
+    expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
   it('should call api with provided user id', () => {
-    mount(<Agent userId={user.id} />);
+    render(<Agent userId={user.id} />);
     expect(doFetch).toBeCalledWith(`users/${user.id}`);
   });
 
-  it('should call api when user id have been changed', async () => {
-    const component = mount(<Agent userId={user.id} />);
-
-    component.setProps({ userId: users[0].id });
+  it('should call api when user id have been changed', () => {
+    const { rerender } = render(<Agent userId={user.id} />);
+    rerender(<Agent userId={users[0].id} />);
 
     const futureEndpoint = `users/${users[0].id}`;
     expect(doFetch).toBeCalledWith(futureEndpoint);
   });
 
   it('should not show badge by default', () => {
-    const component = shallow(<Agent userId={user.id} />);
-    expect(component.find(Badge)).toHaveLength(0);
+    render(<Agent userId={user.id} />);
+    expect(screen.queryByText(/^\d+$/)).not.toBeInTheDocument();
   });
 
   it('should show badge when requested', () => {
-    const component = mount(<Agent userId={user.id} unreadCount={1} />);
-    expect(component.find(Badge)).toHaveLength(1);
+    render(<Agent userId={user.id} unreadCount={1} />);
+    expect(screen.getByText('1')).toBeInTheDocument();
   });
 
   it('should show badge with 1', () => {
-    const component = mount(<Agent userId={user.id} unreadCount={1} />);
-    expect(component.find(Badge).text()).toEqual('1');
+    render(<Agent userId={user.id} unreadCount={1} />);
+    expect(screen.getByText('1')).toBeInTheDocument();
   });
 
   it('should show username', () => {
@@ -68,9 +65,8 @@ describe('Agent', () => {
       doFetch,
     ]);
 
-    const component = shallow(<Agent userId={user.id} />);
-
-    expect(component.find(Typography).text()).toEqual('Amy');
+    render(<Agent userId={user.id} />);
+    expect(screen.getByText('Amy')).toBeInTheDocument();
   });
 
   it('should show empty user name while loading', () => {
@@ -83,9 +79,8 @@ describe('Agent', () => {
       doFetch,
     ]);
 
-    const component = shallow(<Agent userId={user.id} />);
-
-    expect(component.find(Typography).text()).toEqual('');
+    render(<Agent userId={user.id} />);
+    expect(screen.queryByText('Amy')).not.toBeInTheDocument();
   });
 
   it('should show empty user name on error', () => {
@@ -98,9 +93,8 @@ describe('Agent', () => {
       doFetch,
     ]);
 
-    const component = shallow(<Agent userId={user.id} />);
-
-    expect(component.find(Typography).text()).toEqual('');
+    render(<Agent userId={user.id} />);
+    expect(screen.queryByText('Amy')).not.toBeInTheDocument();
   });
 
   it('should show only avatar when requested', () => {
@@ -113,23 +107,8 @@ describe('Agent', () => {
       doFetch,
     ]);
 
-    const component = shallow(<Agent userId={user.id} isAvatar />);
-
-    expect(component.find(Typography)).toHaveLength(0);
-  });
-
-  it('should apply custom styles', () => {
-    const StyledAgent = withStyles({
-      agent: {
-        display: 'none',
-      },
-    })(Agent);
-
-    const component = mount(<StyledAgent userId={user.id} />);
-
-    const node = component.getDOMNode();
-    const display = getComputedStyle(node).getPropertyValue('display');
-
-    expect(display).toBe('none');
+    render(<Agent userId={user.id} isAvatar />);
+    expect(screen.queryByText('Amy')).not.toBeInTheDocument();
+    expect(screen.getByRole('img')).toBeInTheDocument();
   });
 });

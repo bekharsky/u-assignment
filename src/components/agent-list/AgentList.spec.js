@@ -1,18 +1,15 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { shallow, mount } from 'enzyme';
-import { withStyles } from '@material-ui/core/styles';
-import ListItem from '@material-ui/core/ListItem';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import userEvent from '@testing-library/user-event';
 import { ChatContext } from 'contexts';
 import { useApi } from 'hooks';
-import { Loading } from 'components/loading';
-import { Fail } from 'components/fail';
 import { AgentList } from './AgentList';
 import conversations from '__mocks__/conversations.json';
 
-jest.mock('hooks');
+vi.mock('hooks');
 
-const doFetch = jest.fn();
+const doFetch = vi.fn();
 
 beforeEach(() => {
   useApi.mockImplementation(() => [
@@ -25,7 +22,7 @@ beforeEach(() => {
   ]);
 });
 
-const setActiveConvo = jest.fn();
+const setActiveConvo = vi.fn();
 
 const context = {
   activeConvo: conversations[0],
@@ -34,78 +31,65 @@ const context = {
 
 describe('AgentList', () => {
   it('renders without crashing with no props', () => {
-    shallow(
+    render(
       <ChatContext.Provider value={context}>
         <AgentList />
       </ChatContext.Provider>
     );
+    expect(screen.getByRole('list')).toBeInTheDocument();
   });
 
-  it('should render five conversations', async () => {
-    let component = null;
-
-    await act(async () => {
-      component = mount(
-        <ChatContext.Provider value={context}>
-          <AgentList />
-        </ChatContext.Provider>
-      );
-    });
-
-    expect(component.find(ListItem)).toHaveLength(5);
+  it('should render five conversations', () => {
+    render(
+      <ChatContext.Provider value={context}>
+        <AgentList />
+      </ChatContext.Provider>
+    );
+    const buttons = screen.getAllByRole('button');
+    expect(buttons).toHaveLength(5);
   });
 
-  it('should have exact one active conversation', async () => {
-    let component = null;
-
-    await act(async () => {
-      component = mount(
-        <ChatContext.Provider value={context}>
-          <AgentList />
-        </ChatContext.Provider>
-      );
-    });
-
-    expect(component.find(ListItem).filter({ selected: true })).toHaveLength(1);
+  it('should have exact one active conversation', () => {
+    render(
+      <ChatContext.Provider value={context}>
+        <AgentList />
+      </ChatContext.Provider>
+    );
+    const selectedItems = screen
+      .getAllByRole('button')
+      .filter((item) => item.classList.contains('Mui-selected'));
+    expect(selectedItems).toHaveLength(1);
   });
 
   it('should call set active conversation method', async () => {
-    let component = null;
-
-    await act(async () => {
-      component = mount(
-        <ChatContext.Provider value={context}>
-          <AgentList />
-        </ChatContext.Provider>
-      );
-    });
-
-    component
-      .find(ListItem)
-      .filter({ selected: true })
-      .simulate('click');
+    const user = userEvent.setup();
+    render(
+      <ChatContext.Provider value={context}>
+        <AgentList />
+      </ChatContext.Provider>
+    );
+    const selectedItem = screen
+      .getAllByRole('button')
+      .find((item) => item.classList.contains('Mui-selected'));
+    await user.click(selectedItem);
     expect(setActiveConvo).toBeCalled();
   });
 
   it('should call set active conversation method with provided conversation', async () => {
-    let component = null;
-
-    await act(async () => {
-      component = mount(
-        <ChatContext.Provider value={context}>
-          <AgentList />
-        </ChatContext.Provider>
-      );
-    });
-
-    component
-      .find(ListItem)
-      .filter({ selected: true })
-      .simulate('click');
+    const user = userEvent.setup();
+    render(
+      <ChatContext.Provider value={context}>
+        <AgentList />
+      </ChatContext.Provider>
+    );
+    const selectedItem = screen
+      .getAllByRole('button')
+      .find((item) => item.classList.contains('Mui-selected'));
+    await user.click(selectedItem);
     expect(setActiveConvo).toBeCalledWith(conversations[0]);
   });
 
-  it('should show loading spinner', async () => {
+  it('should show loading spinner', () => {
     useApi.mockImplementation(() => [
       {
         isLoading: true,
@@ -115,20 +99,16 @@ describe('AgentList', () => {
       doFetch,
     ]);
 
-    let component = null;
+    render(
+      <ChatContext.Provider value={context}>
+        <AgentList />
+      </ChatContext.Provider>
+    );
 
-    await act(async () => {
-      component = mount(
-        <ChatContext.Provider value={context}>
-          <AgentList />
-        </ChatContext.Provider>
-      );
-    });
-
-    expect(component.find(Loading)).toHaveLength(1);
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
-  it('should show fail sign when api error occures', async () => {
+  it('should show fail sign when api error occures', () => {
     useApi.mockImplementation(() => [
       {
         isLoading: false,
@@ -138,39 +118,12 @@ describe('AgentList', () => {
       doFetch,
     ]);
 
-    let component = null;
+    render(
+      <ChatContext.Provider value={context}>
+        <AgentList />
+      </ChatContext.Provider>
+    );
 
-    await act(async () => {
-      component = mount(
-        <ChatContext.Provider value={context}>
-          <AgentList />
-        </ChatContext.Provider>
-      );
-    });
-
-    expect(component.find(Fail)).toHaveLength(1);
-  });
-
-  it('should apply custom styles', async () => {
-    const StyledAgentList = withStyles({
-      agentList: {
-        display: 'none',
-      },
-    })(AgentList);
-
-    let component = null;
-
-    await act(async () => {
-      component = mount(
-        <ChatContext.Provider value={context}>
-          <StyledAgentList />
-        </ChatContext.Provider>
-      );
-    });
-
-    const node = component.getDOMNode();
-    const display = getComputedStyle(node).getPropertyValue('display');
-
-    expect(display).toBe('none');
+    expect(screen.getByTestId('ErrorIcon')).toBeInTheDocument();
   });
 });

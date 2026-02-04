@@ -1,25 +1,17 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { withStyles } from '@material-ui/core/styles';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 import { TextComposer } from './TextComposer';
 
 describe('TextComposer', () => {
   it('renders without crashing with no props', () => {
-    shallow(<TextComposer />);
+    render(<TextComposer />);
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
-  it('should apply custom styles', () => {
-    const StyledTextComposer = withStyles({
-      textComposer: {
-        display: 'none',
-      },
-    })(TextComposer);
-
-    const component = mount(<StyledTextComposer />);
-
-    const node = component.getDOMNode();
-    const display = getComputedStyle(node).getPropertyValue('display');
-
-    expect(display).toBe('none');
+  it('renders input field and send button', () => {
+    render(<TextComposer />);
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 });

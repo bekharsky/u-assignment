@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { convosFormatter } from './convosFormatter';
 import conversations from '__mocks__/conversations.json';
 

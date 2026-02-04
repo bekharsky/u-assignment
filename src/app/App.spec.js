@@ -1,10 +1,11 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 import { App } from './App';
 
 describe('App', () => {
   it('renders without crashing', () => {
-    const props = { classes: {} };
-    shallow(<App {...props} />);
+    const { container } = render(<App />);
+    expect(container).toBeInTheDocument();
   });
 });
