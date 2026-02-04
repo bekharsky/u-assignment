@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import { useApi } from 'hooks';
 import { convosFormatter } from 'formatters';
 import { ChatContext } from 'contexts';
@@ -9,16 +8,11 @@ import { Agent } from 'components/agent';
 import { Loading } from 'components/loading';
 import { Fail } from 'components/fail';
 
-const useStyles = makeStyles({
-  agentList: {},
-});
-
 /**
  * Conversation list component
  * @param {Object} props React props
  */
-export const AgentList = props => {
-  const classes = useStyles(props);
+export const AgentList = (props) => {
   const { activeConvo, setActiveConvo } = useContext(ChatContext);
   const [{ data, isLoading, isError }] = useApi('conversations', []);
 
@@ -32,8 +26,8 @@ export const AgentList = props => {
   return isLoading ? (
     <Loading />
   ) : (
-    <List className={classes.agentList}>
-      {convos.map(convo => (
+    <List>
+      {convos.map((convo) => (
         <ListItem
           button
           key={convo.id}

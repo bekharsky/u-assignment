@@ -1,26 +1,22 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import ErrorIcon from '@material-ui/icons/Error';
+import { styled } from '@mui/material/styles';
+import ErrorIcon from '@mui/icons-material/Error';
 
-const useStyles = makeStyles({
-  fail: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
+const FailContainer = styled('div')({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
 });
 
 /**
  * Error indicator component
  * @param {Object} props React props
  */
-export const Fail = props => {
-  const classes = useStyles(props);
-
+export const Fail = (props) => {
   return (
-    <div className={classes.fail}>
+    <FailContainer>
       <ErrorIcon fontSize="large" color="primary" />
-    </div>
+    </FailContainer>
   );
 };

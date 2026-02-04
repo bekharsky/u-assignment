@@ -1,35 +1,35 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import Badge from '@material-ui/core/Badge';
-import Typography from '@material-ui/core/Typography';
+import { styled } from '@mui/material/styles';
+import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
+import Typography from '@mui/material/Typography';
 import { useApi } from 'hooks';
 
-const useStyles = makeStyles(theme => ({
-  agent: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexWrap: 'nowrap',
-  },
-  avatar: {
-    backgroundColor: theme.palette.secondary.main,
-    width: theme.spacing(5),
-    height: theme.spacing(5),
-  },
-  username: {
-    marginLeft: theme.spacing(2),
-    fontWeight: 'inherit',
-  },
+const AgentContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  flexWrap: 'nowrap',
 }));
 
-const StyledBadge = withStyles({
-  badge: {
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  backgroundColor: theme.palette.secondary.main,
+  width: theme.spacing(5),
+  height: theme.spacing(5),
+}));
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  marginLeft: theme.spacing(2),
+  fontWeight: 'inherit',
+}));
+
+const StyledBadge = styled(Badge)({
+  '& .MuiBadge-badge': {
     top: 4,
     right: 4,
   },
-})(Badge);
+});
 
 /**
  * Chat agent component
@@ -39,8 +39,6 @@ const StyledBadge = withStyles({
  * @param {boolean} props.isAvatar If true, show just an avatar
  */
 export const Agent = ({ userId, unreadCount, isAvatar, ...props }) => {
-  const classes = useStyles(props);
-
   const endpoint = `users/${userId}`;
   const [{ data, isLoading, isError }, doFetch] = useApi(endpoint, {});
 
@@ -54,15 +52,17 @@ export const Agent = ({ userId, unreadCount, isAvatar, ...props }) => {
   const user = isLoading || isError ? doe : data;
 
   return (
-    <div className={classes.agent}>
-      <StyledBadge badgeContent={unreadCount} color="primary">
-        <Avatar className={classes.avatar} src={user.avatar_url} />
+    <AgentContainer>
+      <StyledBadge
+        badgeContent={unreadCount}
+        color="primary"
+        overlap="rectangular"
+      >
+        <StyledAvatar src={user.avatar_url} />
       </StyledBadge>
 
-      {!isAvatar && (
-        <Typography className={classes.username}>{user.username}</Typography>
-      )}
-    </div>
+      {!isAvatar && <StyledTypography>{user.username}</StyledTypography>}
+    </AgentContainer>
   );
 };
 

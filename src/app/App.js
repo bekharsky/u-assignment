@@ -1,39 +1,33 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
-import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import withRoot from 'withRoot';
 import { ChatContext } from 'contexts';
 import { AgentList } from 'components/agent-list';
 import { MessageList } from 'components/message-list';
 import { Agent } from 'components/agent';
 import { TextComposer } from 'components/text-composer';
-import { useStyles } from './useStyles';
-
-// Component shouldn't define own position
-const StyledTextComposer = withStyles(theme => ({
-  paper: {
-    position: 'absolute',
-    bottom: theme.spacing(2),
-    left: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-}))(TextComposer);
+import {
+  Root,
+  StyledToolbar,
+  ToolbarIcon,
+  StyledAppBar,
+  MenuButton,
+  Title,
+  StyledDrawer,
+  Content,
+  TextComposerWrapper,
+} from './useStyles';
 
 /**
  * Represents an Application
  * @param {Object} props
  */
-const Application = props => {
-  const classes = useStyles(props);
-
+const Application = (props) => {
   const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => {
@@ -49,60 +43,48 @@ const Application = props => {
 
   return (
     <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
-      <div className={classes.root}>
-        <AppBar
-          position="absolute"
-          className={clsx(classes.appBar, open && classes.appBarShift)}
-        >
-          <Toolbar className={classes.toolbar}>
-            <IconButton
+      <Root>
+        <StyledAppBar position="absolute" open={open}>
+          <Toolbar>
+            <MenuButton
               edge="start"
               color="inherit"
               onClick={handleDrawerOpen}
-              className={clsx(
-                classes.menuButton,
-                open && classes.menuButtonHidden
-              )}
+              open={open}
               aria-label="open drawer"
             >
               <MenuIcon />
-            </IconButton>
+            </MenuButton>
 
             {activeConvo ? (
               <Agent userId={activeConvo.with_user_id} />
             ) : (
-              <Typography className={classes.title}>
-                Choose an agent...
-              </Typography>
+              <Title>Choose an agent...</Title>
             )}
           </Toolbar>
-        </AppBar>
+        </StyledAppBar>
 
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-          }}
-          open={open}
-        >
-          <div className={classes.toolbarIcon}>
+        <StyledDrawer variant="permanent" open={open}>
+          <ToolbarIcon>
             <Typography>Conversations</Typography>
 
             <IconButton onClick={handleDrawerClose} aria-label="close drawer">
               <ChevronLeftIcon />
             </IconButton>
-          </div>
+          </ToolbarIcon>
 
           <Divider />
 
           <AgentList />
-        </Drawer>
+        </StyledDrawer>
 
-        <main className={classes.content}>
+        <Content>
           <MessageList />
-          <StyledTextComposer />
-        </main>
-      </div>
+          <TextComposerWrapper>
+            <TextComposer />
+          </TextComposerWrapper>
+        </Content>
+      </Root>
     </ChatContext.Provider>
   );
 };

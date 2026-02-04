@@ -1,26 +1,22 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { styled } from '@mui/material/styles';
+import CircularProgress from '@mui/material/CircularProgress';
 
-const useStyles = makeStyles({
-  loading: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
+const LoadingContainer = styled('div')({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
 });
 
 /**
  * Circular loading indicator component
  * @param {Object} props React props
  */
-export const Loading = props => {
-  const classes = useStyles(props);
-
+export const Loading = (props) => {
   return (
-    <div className={classes.loading}>
+    <LoadingContainer>
       <CircularProgress />
-    </div>
+    </LoadingContainer>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import { styled } from '@mui/material/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import { useApi } from 'hooks';
 import { messagesFormatter } from 'formatters';
 import { ChatContext } from 'contexts';
@@ -9,21 +9,18 @@ import { Message } from 'components/message';
 import { Loading } from 'components/loading';
 import { Fail } from 'components/fail';
 
-const useStyles = makeStyles(theme => ({
-  messageList: {
-    overflow: 'auto',
-    maxHeight: '100%',
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(1),
-  },
+const StyledList = styled(List)(({ theme }) => ({
+  overflow: 'auto',
+  maxHeight: '100%',
+  paddingTop: theme.spacing(3),
+  paddingBottom: theme.spacing(1),
 }));
 
 /**
  * Renders messages for a given conversation
  * @param {Object} props React props
  */
-export const MessageList = props => {
-  const classes = useStyles(props);
+export const MessageList = (props) => {
   const listRef = useRef();
   const { activeConvo } = useContext(ChatContext);
 
@@ -52,7 +49,7 @@ export const MessageList = props => {
   return isLoading ? (
     <Loading />
   ) : (
-    <List className={classes.messageList} ref={listRef}>
+    <StyledList ref={listRef}>
       {messages.map((message, i) => {
         return (
           <ListItem key={i}>
@@ -60,6 +57,6 @@ export const MessageList = props => {
           </ListItem>
         );
       })}
-    </List>
+    </StyledList>
   );
 };
