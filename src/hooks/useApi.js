@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
-import { dataFetchReducer } from 'reducers';
+import { dataFetchReducer } from '../reducers';
 
 /**
  * Fetch data using the provided API

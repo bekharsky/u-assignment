@@ -3,7 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useApi } from './useApi';
 import axios from 'axios';
-import users from '__mocks__/users';
+import users from '../__mocks__/users';
 
 vi.mock('axios');
 

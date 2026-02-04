@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Typography from '@mui/material/Typography';
-import { useApi } from 'hooks';
+import { useApi } from '../../hooks';
 
 const AgentContainer = styled('div')(({ theme }) => ({
   display: 'flex',

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { format, parseISO } from 'date-fns';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { Agent } from 'components/agent';
-import { Bubble } from 'components/bubble';
+import { Agent } from '../agent';
+import { Bubble } from '../bubble';
 
 const MessageContainer = styled('div', {
   shouldForwardProp: (prop) => prop !== 'isOwn',

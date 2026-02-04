@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useApi } from 'hooks';
+import { useApi } from '../../hooks';
 import { Agent } from './Agent';
-import user from '__mocks__/user.json';
-import users from '__mocks__/users.json';
+import user from '../../__mocks__/user.json';
+import users from '../../__mocks__/users.json';
 
-vi.mock('hooks');
+vi.mock('../../hooks');
 
 const doFetch = vi.fn();
 

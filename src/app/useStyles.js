@@ -3,7 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { TextComposer } from 'components/text-composer';
+import { TextComposer } from '../components/text-composer';
 import pattern from './img/pattern.png';
 
 export const drawerWidth = 240;

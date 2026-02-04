@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { messagesFormatter } from './messagesFormatter';
-import messages from '__mocks__/messages.json';
+import messages from '../__mocks__/messages.json';
 
 describe('messagesFormatter', () => {
   it('sorts messages', () => {

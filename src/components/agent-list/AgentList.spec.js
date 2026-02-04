@@ -2,12 +2,12 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { ChatContext } from 'contexts';
-import { useApi } from 'hooks';
+import { ChatContext } from '../../contexts';
+import { useApi } from '../../hooks';
 import { AgentList } from './AgentList';
-import conversations from '__mocks__/conversations.json';
+import conversations from '../../__mocks__/conversations.json';
 
-vi.mock('hooks');
+vi.mock('../../hooks');
 
 const doFetch = vi.fn();
 

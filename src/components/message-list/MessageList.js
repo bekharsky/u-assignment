@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useApi } from 'hooks';
-import { messagesFormatter } from 'formatters';
-import { ChatContext } from 'contexts';
-import { Message } from 'components/message';
-import { Loading } from 'components/loading';
-import { Fail } from 'components/fail';
+import { useApi } from '../../hooks';
+import { messagesFormatter } from '../../formatters';
+import { ChatContext } from '../../contexts';
+import { Message } from '../message';
+import { Loading } from '../loading';
+import { Fail } from '../fail';
 
 const StyledList = styled(List)(({ theme }) => ({
   overflow: 'auto',

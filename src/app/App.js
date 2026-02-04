@@ -5,12 +5,12 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import withRoot from 'withRoot';
-import { ChatContext } from 'contexts';
-import { AgentList } from 'components/agent-list';
-import { MessageList } from 'components/message-list';
-import { Agent } from 'components/agent';
-import { TextComposer } from 'components/text-composer';
+import withRoot from '../withRoot';
+import { ChatContext } from '../contexts';
+import { AgentList } from '../components/agent-list';
+import { MessageList } from '../components/message-list';
+import { Agent } from '../components/agent';
+import { TextComposer } from '../components/text-composer';
 import {
   Root,
   StyledToolbar,

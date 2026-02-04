@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useApi } from 'hooks';
-import { convosFormatter } from 'formatters';
-import { ChatContext } from 'contexts';
-import { Agent } from 'components/agent';
-import { Loading } from 'components/loading';
-import { Fail } from 'components/fail';
+import { useApi } from '../../hooks';
+import { convosFormatter } from '../../formatters';
+import { ChatContext } from '../../contexts';
+import { Agent } from '../agent';
+import { Loading } from '../loading';
+import { Fail } from '../fail';
 
 /**
  * Conversation list component
