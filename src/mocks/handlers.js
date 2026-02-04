@@ -2,7 +2,6 @@ import { http, HttpResponse } from 'msw';
 import usersData from '../__mocks__/users.json';
 import conversationsData from '../__mocks__/conversations.json';
 import messagesData from '../__mocks__/messages.json';
-import userData from '../__mocks__/user.json';
 
 const API_BASE =
   import.meta.env.VITE_API || 'https://ui-developer-backend.herokuapp.com/api';

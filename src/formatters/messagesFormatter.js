@@ -3,8 +3,8 @@
  * @param {Array} messages
  * @returns {Array}
  */
-export const messagesFormatter = messages => {
-  const formattedMessages = messages.map(message => {
+export const messagesFormatter = (messages) => {
+  const formattedMessages = messages.map((message) => {
     return {
       ...message,
       timestamp: new Date(message.created_at).getTime(),

@@ -1,4 +1,3 @@
-import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import purple from '@mui/material/colors/purple';
 import green from '@mui/material/colors/green';

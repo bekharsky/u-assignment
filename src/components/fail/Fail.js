@@ -1,4 +1,3 @@
-import React from 'react';
 import { styled } from '@mui/material/styles';
 import ErrorIcon from '@mui/icons-material/Error';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { format, parseISO } from 'date-fns';
 import { styled } from '@mui/material/styles';

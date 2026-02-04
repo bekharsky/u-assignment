@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
@@ -71,4 +71,6 @@ Agent.propTypes = {
   userId: PropTypes.string.isRequired,
   /** Unread messages count to show the badge */
   unreadCount: PropTypes.number,
+  /** If true, show just an avatar */
+  isAvatar: PropTypes.bool,
 };
