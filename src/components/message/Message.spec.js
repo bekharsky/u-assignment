@@ -1,35 +1,29 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useUser } from '../../hooks/useUser';
+import { screen, waitFor } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { renderWithQueryClient } from '../../test-utils';
 import { Message } from './Message';
 import messages from '../../__mocks__/messages.json';
-import user from '../../__mocks__/user.json';
-
-vi.mock('../../hooks/useUser');
-
-beforeEach(() => {
-  vi.mocked(useUser).mockReturnValue({
-    isLoading: false,
-    isError: false,
-    data: user,
-  });
-});
 
 describe('Message', () => {
-  it('renders without crashing with no props', () => {
-    render(<Message message={messages[0]} />);
-    expect(screen.getByRole('img')).toBeInTheDocument();
+  it('renders without crashing with no props', async () => {
+    renderWithQueryClient(<Message message={messages[0]} />);
+    await waitFor(() => {
+      expect(screen.getByRole('img')).toBeInTheDocument();
+    });
   });
 
-  it('should render agent in the avatar mode', () => {
-    render(<Message message={messages[0]} />);
-    // Agent should be rendered without username text when in avatar mode
-    expect(screen.getByRole('img')).toBeInTheDocument();
+  it('should render agent in the avatar mode', async () => {
+    renderWithQueryClient(<Message message={messages[0]} />);
+    await waitFor(() => {
+      expect(screen.getByRole('img')).toBeInTheDocument();
+    });
   });
 
-  it('renders message text', () => {
-    render(<Message message={messages[0]} />);
-    expect(screen.getByText(messages[0].body)).toBeInTheDocument();
+  it('renders message text', async () => {
+    renderWithQueryClient(<Message message={messages[0]} />);
+    await waitFor(() => {
+      expect(screen.getByText(messages[0].body)).toBeInTheDocument();
+    });
   });
 });

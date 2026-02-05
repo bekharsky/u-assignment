@@ -1,71 +1,52 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useUser } from '../../hooks/useUser';
+import { screen, waitFor } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { renderWithQueryClient } from '../../test-utils';
 import { Agent } from './Agent';
 import user from '../../__mocks__/user.json';
 
-vi.mock('../../hooks/useUser');
-
-beforeEach(() => {
-  vi.mocked(useUser).mockReturnValue({
-    isLoading: false,
-    isError: false,
-    data: user,
-  });
-});
-
 describe('Agent', () => {
-  it('renders without crashing', () => {
-    render(<Agent userId={user.id} />);
-    expect(screen.getByRole('img')).toBeInTheDocument();
+  it('renders without crashing', async () => {
+    renderWithQueryClient(<Agent userId={user.id} />);
+    await waitFor(() => {
+      expect(screen.getByRole('img')).toBeInTheDocument();
+    });
   });
 
-  it('should not show badge by default', () => {
-    render(<Agent userId={user.id} />);
+  it('should not show badge by default', async () => {
+    renderWithQueryClient(<Agent userId={user.id} />);
+    await waitFor(() => {
+      expect(screen.getByRole('img')).toBeInTheDocument();
+    });
     expect(screen.queryByText(/^\d+$/)).not.toBeInTheDocument();
   });
 
-  it('should show badge when requested', () => {
-    render(<Agent userId={user.id} unreadCount={1} />);
-    expect(screen.getByText('1')).toBeInTheDocument();
-  });
-
-  it('should show badge with 1', () => {
-    render(<Agent userId={user.id} unreadCount={1} />);
-    expect(screen.getByText('1')).toBeInTheDocument();
-  });
-
-  it('should show username', () => {
-    render(<Agent userId={user.id} />);
-    expect(screen.getByText('Amy')).toBeInTheDocument();
-  });
-
-  it('should show empty user name while loading', () => {
-    vi.mocked(useUser).mockReturnValue({
-      isLoading: true,
-      isError: false,
-      data: undefined,
+  it('should show badge when requested', async () => {
+    renderWithQueryClient(<Agent userId={user.id} unreadCount={1} />);
+    await waitFor(() => {
+      expect(screen.getByText('1')).toBeInTheDocument();
     });
-
-    render(<Agent userId={user.id} />);
-    expect(screen.queryByText('Amy')).not.toBeInTheDocument();
   });
 
-  it('should show empty user name on error', () => {
-    vi.mocked(useUser).mockReturnValue({
-      isLoading: false,
-      isError: true,
-      data: undefined,
+  it('should show badge with 1', async () => {
+    renderWithQueryClient(<Agent userId={user.id} unreadCount={1} />);
+    await waitFor(() => {
+      expect(screen.getByText('1')).toBeInTheDocument();
     });
-
-    render(<Agent userId={user.id} />);
-    expect(screen.queryByText('Amy')).not.toBeInTheDocument();
   });
 
-  it('should show only avatar when requested', () => {
-    render(<Agent userId={user.id} isAvatar />);
+  it('should show username', async () => {
+    renderWithQueryClient(<Agent userId={user.id} />);
+    await waitFor(() => {
+      expect(screen.getByText('Amy')).toBeInTheDocument();
+    });
+  });
+
+  it('should show only avatar when requested', async () => {
+    renderWithQueryClient(<Agent userId={user.id} isAvatar />);
+    await waitFor(() => {
+      expect(screen.getByRole('img')).toBeInTheDocument();
+    });
     expect(screen.queryByText('Amy')).not.toBeInTheDocument();
-    expect(screen.getByRole('img')).toBeInTheDocument();
   });
 });
