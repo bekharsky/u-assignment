@@ -1,14 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import type { Conversation } from '../types';
+import { apiClient } from '../lib/apiClient';
 
 /**
  * Fetch conversations from the API
  * @returns {Promise} Axios response with conversations data
  */
 const fetchConversations = async (): Promise<Conversation[]> => {
-  const endpoint = `${import.meta.env.VITE_API}/conversations`;
-  const { data } = await axios.get<Conversation[]>(endpoint);
+  const { data } = await apiClient.get<Conversation[]>('/conversations');
 
   // Invalid requests results in an XML with code 200
   if (typeof data === 'string') {

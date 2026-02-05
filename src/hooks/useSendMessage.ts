@@ -1,9 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import type { Message } from '../types';
-
-const API_BASE =
-  import.meta.env.VITE_API || 'https://ui-developer-backend.herokuapp.com/api';
+import { apiClient } from '../lib/apiClient';
 
 interface SendMessageParams {
   conversationId: string;
@@ -19,8 +16,8 @@ export const useSendMessage = () => {
 
   return useMutation({
     mutationFn: async (params: SendMessageParams): Promise<Message> => {
-      const response = await axios.post(
-        `${API_BASE}/conversations/${params.conversationId}/messages`,
+      const response = await apiClient.post(
+        `/conversations/${params.conversationId}/messages`,
         {
           body: params.body,
           user_id: params.userId,

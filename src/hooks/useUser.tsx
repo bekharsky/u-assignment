@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import type { User } from '../types';
+import { apiClient } from '../lib/apiClient';
 
 /**
  * Fetch user data from the API
@@ -8,8 +8,7 @@ import type { User } from '../types';
  * @returns {Promise} Axios response with user data
  */
 const fetchUser = async (userId: string): Promise<User> => {
-  const endpoint = `${import.meta.env.VITE_API}/users/${userId}`;
-  const { data } = await axios.get<User>(endpoint);
+  const { data } = await apiClient.get<User>(`/users/${userId}`);
 
   // Invalid requests results in an XML with code 200
   if (typeof data === 'string') {
