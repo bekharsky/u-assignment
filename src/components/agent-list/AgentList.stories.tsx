@@ -13,9 +13,9 @@ const meta: Meta<typeof AgentList> = {
   component: AgentList,
   decorators: [
     (Story) => {
-      const [activeConvo, setActiveConvo] = React.useState<
-        Conversation | false
-      >(false);
+      const [activeConvo, setActiveConvo] = React.useState<Conversation | null>(
+        null
+      );
       return (
         <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
           <div style={{ maxWidth: '400px' }}>

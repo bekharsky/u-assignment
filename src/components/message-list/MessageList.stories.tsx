@@ -34,9 +34,9 @@ export const Default: Story = {
         unread_message_count: 0,
         last_updated: '2016-08-23T18:10:00.000Z',
       };
-      const [activeConvo, setActiveConvo] = React.useState<
-        Conversation | false
-      >(mockConversation);
+      const [activeConvo, setActiveConvo] = React.useState<Conversation | null>(
+        mockConversation
+      );
       return (
         <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
           <Story />
@@ -61,9 +61,9 @@ export const Loading: Story = {
         unread_message_count: 0,
         last_updated: '2016-08-23T18:10:00.000Z',
       };
-      const [activeConvo, setActiveConvo] = React.useState<
-        Conversation | false
-      >(mockConversation);
+      const [activeConvo, setActiveConvo] = React.useState<Conversation | null>(
+        mockConversation
+      );
       return (
         <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
           <Story />
@@ -88,9 +88,9 @@ export const ErrorState: Story = {
         unread_message_count: 0,
         last_updated: '2016-08-23T18:10:00.000Z',
       };
-      const [activeConvo, setActiveConvo] = React.useState<
-        Conversation | false
-      >(mockConversation);
+      const [activeConvo, setActiveConvo] = React.useState<Conversation | null>(
+        mockConversation
+      );
       return (
         <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
           <Story />
@@ -109,9 +109,9 @@ export const ErrorState: Story = {
 export const NoConversation: Story = {
   decorators: [
     (Story) => {
-      const [activeConvo, setActiveConvo] = React.useState<
-        Conversation | false
-      >(false);
+      const [activeConvo, setActiveConvo] = React.useState<Conversation | null>(
+        null
+      );
       return (
         <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
           <Story />

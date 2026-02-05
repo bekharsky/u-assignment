@@ -26,7 +26,7 @@ export const useSendMessage = () => {
       );
       return parseResponse(response, MessageSchema);
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       // Invalidate messages query to refetch and show the new message
       queryClient.invalidateQueries({
         queryKey: ['messages', variables.conversationId],

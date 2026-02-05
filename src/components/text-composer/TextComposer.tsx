@@ -45,7 +45,7 @@ export const TextComposer: React.FC = () => {
     const result = messageSchema.safeParse(message.trim());
 
     if (!result.success) {
-      setValidationError(result.error.errors[0].message);
+      setValidationError(result.error.issues[0].message);
       return;
     }
 

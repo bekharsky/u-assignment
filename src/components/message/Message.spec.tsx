@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { renderWithQueryClient } from '../../test-utils';
 import { Message } from './Message';
 import messagesData from '../../__mocks__/messages.json';
-import type { FormattedMessage } from '../../formatters/messagesFormatter';
+import type { FormattedMessage } from '../../hooks/useMessages';
 
 // Transform messages to match FormattedMessage type
 const messages: FormattedMessage[] = messagesData.map((msg: any) => ({

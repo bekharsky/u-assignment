@@ -14,6 +14,7 @@ const fetchConversations = async (): Promise<Conversation[]> => {
 
 /**
  * Custom hook to fetch conversations using React Query
+ * Automatically sorts by ID descending
  * @returns {Object} React Query result object with conversations data, loading and error states
  * @example const { data, isLoading, isError } = useConversations();
  */
@@ -21,5 +22,6 @@ export const useConversations = () => {
   return useQuery<Conversation[]>({
     queryKey: ['conversations'],
     queryFn: fetchConversations,
+    select: (data) => [...data].sort((a, b) => Number(b.id) - Number(a.id)),
   });
 };

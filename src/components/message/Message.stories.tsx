@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Message } from './Message';
 import { successHandlers } from '../../mocks/storybook-handlers';
-import type { FormattedMessage } from '../../formatters/messagesFormatter';
+import type { FormattedMessage } from '../../hooks/useMessages';
 
 const meta: Meta<typeof Message> = {
   title: 'Components/Message',

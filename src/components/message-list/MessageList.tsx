@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { useMessages } from '../../hooks/useMessages';
-import { messagesFormatter } from '../../formatters/messagesFormatter';
 import { ChatContext } from '../../contexts/ChatContext';
 import { Message } from '../message/Message';
 import { Loading } from '../loading/Loading';
@@ -25,28 +24,31 @@ export const MessageList: React.FC = () => {
   const { activeConvo } = useContext(ChatContext);
 
   const {
-    data = [],
+    data: messages = [],
     isLoading,
     isError,
-  } = useMessages(activeConvo !== false ? activeConvo.id : undefined);
+  } = useMessages(activeConvo?.id);
 
   useEffect(() => {
-    // Inverted scrollbar with newest messages at the bottom
-    if (data.length > 0 && listRef.current) {
-      listRef.current.scrollTop = listRef.current.scrollHeight;
+    // Scroll to bottom when messages change
+    if (messages.length > 0 && listRef.current) {
+      const lastMessage = listRef.current.lastElementChild;
+      // Check if scrollIntoView exists (not available in jsdom)
+      if (lastMessage && typeof lastMessage.scrollIntoView === 'function') {
+        lastMessage.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-  }, [data]);
+  }, [messages]);
 
   if (isError) {
     return <Fail />;
   }
 
-  // Newest at the bottom (inverted scrollbar style)
-  const messages = messagesFormatter(data);
+  if (isLoading) {
+    return <Loading />;
+  }
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return (
     <StyledList ref={listRef}>
       {messages.map((message, i) => {
         return (

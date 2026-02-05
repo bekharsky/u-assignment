@@ -4,11 +4,15 @@ import userEvent from '@testing-library/user-event';
 import { renderWithQueryClient } from '../../test-utils';
 import { ChatContext } from '../../contexts/ChatContext';
 import { AgentList } from './AgentList';
+import type { Conversation } from '../../types';
 import conversations from '../../__mocks__/conversations.json';
 
 const setActiveConvo = vi.fn();
 
-const context = {
+const context: {
+  activeConvo: Conversation | null;
+  setActiveConvo: typeof setActiveConvo;
+} = {
   activeConvo: {
     ...conversations[0],
     last_updated: '2016-08-23T18:10:00.000Z',
@@ -47,6 +51,19 @@ describe('AgentList', () => {
         .getAllByRole('button')
         .filter((item) => item.classList.contains('Mui-selected'));
       expect(selectedItems).toHaveLength(1);
+    });
+  });
+
+  it('should have no active conversation when activeConvo is null', async () => {
+    renderAgentList({
+      activeConvo: null,
+      setActiveConvo,
+    });
+    await waitFor(() => {
+      const selectedItems = screen
+        .getAllByRole('button')
+        .filter((item) => item.classList.contains('Mui-selected'));
+      expect(selectedItems).toHaveLength(0);
     });
   });
 

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import withRoot from '../withRoot';
+import { theme } from '../theme';
 import { ChatContext } from '../contexts/ChatContext';
 import { queryClient } from '../lib/queryClient';
 import { AgentList } from '../components/agent-list/AgentList';
@@ -27,10 +29,9 @@ import {
 } from './useStyles';
 
 /**
- * Represents an Application
- * @param {Object} props
+ * Main application component
  */
-const Application: React.FC = () => {
+const App: React.FC = () => {
   const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => {
@@ -42,61 +43,64 @@ const Application: React.FC = () => {
   };
 
   // Active conversation to work with
-  const [activeConvo, setActiveConvo] = useState<Conversation | false>(false);
+  const [activeConvo, setActiveConvo] = useState<Conversation | null>(null);
 
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
-          <Root>
-            <StyledAppBar position="absolute" open={open}>
-              <Toolbar>
-                <MenuButton
-                  edge="start"
-                  color="inherit"
-                  onClick={handleDrawerOpen}
-                  open={open}
-                  aria-label="open drawer"
-                >
-                  <MenuIcon />
-                </MenuButton>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <ChatContext.Provider value={{ activeConvo, setActiveConvo }}>
+            <Root>
+              <StyledAppBar position="absolute" open={open}>
+                <Toolbar>
+                  <MenuButton
+                    edge="start"
+                    color="inherit"
+                    onClick={handleDrawerOpen}
+                    open={open}
+                    aria-label="open drawer"
+                  >
+                    <MenuIcon />
+                  </MenuButton>
 
-                {activeConvo ? (
-                  <Agent userId={activeConvo.with_user_id} />
-                ) : (
-                  <Title>Choose an agent...</Title>
-                )}
-              </Toolbar>
-            </StyledAppBar>
+                  {activeConvo ? (
+                    <Agent userId={activeConvo.with_user_id} />
+                  ) : (
+                    <Title>Choose an agent...</Title>
+                  )}
+                </Toolbar>
+              </StyledAppBar>
 
-            <StyledDrawer variant="permanent" open={open}>
-              <ToolbarIcon>
-                <Typography>Conversations</Typography>
+              <StyledDrawer variant="permanent" open={open}>
+                <ToolbarIcon>
+                  <Typography>Conversations</Typography>
 
-                <IconButton
-                  onClick={handleDrawerClose}
-                  aria-label="close drawer"
-                >
-                  <ChevronLeftIcon />
-                </IconButton>
-              </ToolbarIcon>
+                  <IconButton
+                    onClick={handleDrawerClose}
+                    aria-label="close drawer"
+                  >
+                    <ChevronLeftIcon />
+                  </IconButton>
+                </ToolbarIcon>
 
-              <Divider />
+                <Divider />
 
-              <AgentList />
-            </StyledDrawer>
+                <AgentList />
+              </StyledDrawer>
 
-            <Content>
-              <MessageList />
-              <TextComposerWrapper>
-                <TextComposer />
-              </TextComposerWrapper>
-            </Content>
-          </Root>
-        </ChatContext.Provider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+              <Content>
+                <MessageList />
+                <TextComposerWrapper>
+                  <TextComposer />
+                </TextComposerWrapper>
+              </Content>
+            </Root>
+          </ChatContext.Provider>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </ThemeProvider>
   );
 };
 
-export const App = withRoot(Application);
+export { App };

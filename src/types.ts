@@ -34,6 +34,6 @@ export const MessagesArraySchema = z.array(MessageSchema);
 
 // Chat context type (not validated by API)
 export interface ChatContextType {
-  activeConvo: Conversation | false;
-  setActiveConvo: (convo: Conversation | false) => void;
+  activeConvo: Conversation | null;
+  setActiveConvo: (convo: Conversation | null) => void;
 }

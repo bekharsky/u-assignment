@@ -19,7 +19,7 @@ const createWrapper = () => {
 };
 
 describe('useConversations', () => {
-  it('should fetch and return conversations', async () => {
+  it('should fetch and return conversations sorted by ID descending', async () => {
     const { result } = renderHook(() => useConversations(), {
       wrapper: createWrapper(),
     });
@@ -29,7 +29,11 @@ describe('useConversations', () => {
     });
 
     expect(result.current.data).toHaveLength(5);
-    expect(result.current.data).toEqual(conversations);
+    // Data should be sorted by ID descending (5, 4, 3, 2, 1)
+    const sortedConversations = [...conversations].sort(
+      (a, b) => Number(b.id) - Number(a.id)
+    );
+    expect(result.current.data).toEqual(sortedConversations);
   });
 
   it('should set loading state initially', () => {

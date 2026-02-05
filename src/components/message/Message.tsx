@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { Agent } from '../agent/Agent';
 import { Bubble } from '../bubble/Bubble';
-import type { FormattedMessage } from '../../formatters/messagesFormatter';
+import type { FormattedMessage } from '../../hooks/useMessages';
 
 const MessageContainer = styled('div', {
   shouldForwardProp: (prop) => prop !== 'isOwn',
