@@ -8,7 +8,8 @@ const API_BASE =
   import.meta.env.VITE_API || 'https://ui-developer-backend.herokuapp.com/api';
 
 const users = usersData as User[];
-const conversations = conversationsData.map((c) => ({
+// Store conversations in a mutable array to simulate state changes
+let conversations = conversationsData.map((c) => ({
   ...c,
   last_updated: '2016-08-23T18:10:00.000Z',
 })) as Conversation[];
@@ -53,6 +54,22 @@ export const successHandlers = [
     }
     return new HttpResponse(null, { status: 404 });
   }),
+
+  // Mark conversation as read
+  http.patch(
+    `${API_BASE}/conversations/:conversationId/read`,
+    async ({ params }) => {
+      await delay(300);
+      const conversationId = params.conversationId as string;
+      const conversation = conversations.find((c) => c.id === conversationId);
+      if (conversation) {
+        // Update the unread count to 0
+        conversation.unread_message_count = 0;
+        return HttpResponse.json(conversation);
+      }
+      return new HttpResponse(null, { status: 404 });
+    }
+  ),
 ];
 
 // Error handlers

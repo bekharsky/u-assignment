@@ -8,7 +8,8 @@ const API_BASE =
   import.meta.env.VITE_API || 'https://ui-developer-backend.herokuapp.com/api';
 
 const users = usersData as User[];
-const conversations = conversationsData as Conversation[];
+// Store conversations in a mutable array to simulate state changes
+let conversations = [...(conversationsData as Conversation[])];
 // Transform messages data to match our Message type (from_user_id -> user_id)
 const messages = messagesData.map((msg: any) => ({
   id: msg.id,
@@ -106,6 +107,20 @@ export const handlers = [
       return HttpResponse.json(conversationMessages);
     }
   ),
+
+  // Mark conversation as read
+  http.patch(`${API_BASE}/conversations/:conversationId/read`, ({ params }) => {
+    const { conversationId } = params;
+    const conversation = conversations.find((c) => c.id === conversationId);
+
+    if (conversation) {
+      // Update the unread count to 0
+      conversation.unread_message_count = 0;
+      return HttpResponse.json(conversation);
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
 
   // Generate avatar images
   http.get('/avatars/:userId.svg', ({ params }) => {

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { useConversations } from '../../hooks/useConversations';
+import { useMarkConversationRead } from '../../hooks/useMarkConversationRead';
 import { convosFormatter } from '../../formatters/convosFormatter';
 import { ChatContext } from '../../contexts/ChatContext';
 import { Agent } from '../agent/Agent';
@@ -15,6 +16,7 @@ import { Fail } from '../fail/Fail';
 export const AgentList: React.FC = () => {
   const { activeConvo, setActiveConvo } = useContext(ChatContext);
   const { data = [], isLoading, isError } = useConversations();
+  const markAsRead = useMarkConversationRead();
 
   if (isError) {
     return <Fail />;
@@ -34,6 +36,10 @@ export const AgentList: React.FC = () => {
           selected={activeConvo !== false && convo.id === activeConvo.id}
           onClick={() => {
             setActiveConvo(convo);
+            // Mark conversation as read if it has unread messages
+            if (convo.unread_message_count > 0) {
+              markAsRead.mutate(convo.id);
+            }
           }}
         >
           <Agent
