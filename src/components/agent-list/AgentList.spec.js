@@ -2,24 +2,27 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { ChatContext } from '../../contexts';
-import { useApi } from '../../hooks';
+import { ChatContext } from '../../contexts/ChatContext';
+import { useConversations } from '../../hooks/useConversations';
+import { useUser } from '../../hooks/useUser';
 import { AgentList } from './AgentList';
 import conversations from '../../__mocks__/conversations.json';
 
-vi.mock('../../hooks');
-
-const doFetch = vi.fn();
+vi.mock('../../hooks/useConversations');
+vi.mock('../../hooks/useUser');
 
 beforeEach(() => {
-  useApi.mockImplementation(() => [
-    {
-      isLoading: false,
-      isError: false,
-      data: conversations,
-    },
-    doFetch,
-  ]);
+  vi.mocked(useConversations).mockReturnValue({
+    isLoading: false,
+    isError: false,
+    data: conversations,
+  });
+  
+  vi.mocked(useUser).mockReturnValue({
+    isLoading: false,
+    isError: false,
+    data: { username: 'Test', avatar_url: null },
+  });
 });
 
 const setActiveConvo = vi.fn();
@@ -90,14 +93,11 @@ describe('AgentList', () => {
   });
 
   it('should show loading spinner', () => {
-    useApi.mockImplementation(() => [
-      {
-        isLoading: true,
-        isError: false,
-        data: [],
-      },
-      doFetch,
-    ]);
+    vi.mocked(useConversations).mockReturnValue({
+      isLoading: true,
+      isError: false,
+      data: [],
+    });
 
     render(
       <ChatContext.Provider value={context}>
@@ -109,14 +109,11 @@ describe('AgentList', () => {
   });
 
   it('should show fail sign when api error occures', () => {
-    useApi.mockImplementation(() => [
-      {
-        isLoading: false,
-        isError: true,
-        data: [],
-      },
-      doFetch,
-    ]);
+    vi.mocked(useConversations).mockReturnValue({
+      isLoading: false,
+      isError: true,
+      data: [],
+    });
 
     render(
       <ChatContext.Provider value={context}>

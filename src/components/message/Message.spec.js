@@ -1,24 +1,19 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useApi } from '../../hooks';
+import { useUser } from '../../hooks/useUser';
 import { Message } from './Message';
 import messages from '../../__mocks__/messages.json';
 import user from '../../__mocks__/user.json';
 
-vi.mock('../../hooks');
-
-const doFetch = vi.fn();
+vi.mock('../../hooks/useUser');
 
 beforeEach(() => {
-  useApi.mockImplementation(() => [
-    {
-      isLoading: false,
-      isError: false,
-      data: user,
-    },
-    doFetch,
-  ]);
+  vi.mocked(useUser).mockReturnValue({
+    isLoading: false,
+    isError: false,
+    data: user,
+  });
 });
 
 describe('Message', () => {

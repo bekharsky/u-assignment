@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useApi } from '../../hooks';
-import { convosFormatter } from '../../formatters';
-import { ChatContext } from '../../contexts';
-import { Agent } from '../agent';
-import { Loading } from '../loading';
-import { Fail } from '../fail';
+import { useConversations } from '../../hooks/useConversations';
+import { convosFormatter } from '../../formatters/convosFormatter';
+import { ChatContext } from '../../contexts/ChatContext';
+import { Agent } from '../agent/Agent';
+import { Loading } from '../loading/Loading';
+import { Fail } from '../fail/Fail';
 
 /**
  * Conversation list component
@@ -14,7 +14,7 @@ import { Fail } from '../fail';
  */
 export const AgentList = (props) => {
   const { activeConvo, setActiveConvo } = useContext(ChatContext);
-  const [{ data, isLoading, isError }] = useApi('conversations', []);
+  const { data = [], isLoading, isError } = useConversations();
 
   if (isError) {
     return <Fail />;

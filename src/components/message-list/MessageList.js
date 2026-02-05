@@ -2,12 +2,12 @@ import { useContext, useEffect, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useApi } from '../../hooks';
-import { messagesFormatter } from '../../formatters';
-import { ChatContext } from '../../contexts';
-import { Message } from '../message';
-import { Loading } from '../loading';
-import { Fail } from '../fail';
+import { useMessages } from '../../hooks/useMessages';
+import { messagesFormatter } from '../../formatters/messagesFormatter';
+import { ChatContext } from '../../contexts/ChatContext';
+import { Message } from '../message/Message';
+import { Loading } from '../loading/Loading';
+import { Fail } from '../fail/Fail';
 
 const StyledList = styled(List)(({ theme }) => ({
   overflow: 'auto',
@@ -24,13 +24,7 @@ export const MessageList = (props) => {
   const listRef = useRef();
   const { activeConvo } = useContext(ChatContext);
 
-  const endpoint = activeConvo && `conversations/${activeConvo.id}/messages`;
-  const [{ data, isLoading, isError }, doFetch] = useApi(endpoint, []);
-
-  useEffect(() => {
-    // Fetch a new conversation when needed
-    doFetch(endpoint);
-  }, [endpoint, doFetch]);
+  const { data = [], isLoading, isError } = useMessages(activeConvo?.id);
 
   useEffect(() => {
     // Inverted scrollbar with newest messages at the bottom

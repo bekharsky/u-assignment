@@ -1,25 +1,28 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ChatContext } from '../../contexts';
-import { useApi } from '../../hooks';
+import { ChatContext } from '../../contexts/ChatContext';
+import { useMessages } from '../../hooks/useMessages';
+import { useUser } from '../../hooks/useUser';
 import { MessageList } from './MessageList';
 import conversations from '../../__mocks__/conversations.json';
 import messages from '../../__mocks__/messages.json';
 
-vi.mock('../../hooks');
-
-const doFetch = vi.fn();
+vi.mock('../../hooks/useMessages');
+vi.mock('../../hooks/useUser');
 
 beforeEach(() => {
-  useApi.mockImplementation(() => [
-    {
-      isLoading: false,
-      isError: false,
-      data: messages,
-    },
-    doFetch,
-  ]);
+  vi.mocked(useMessages).mockReturnValue({
+    isLoading: false,
+    isError: false,
+    data: messages,
+  });
+  
+  vi.mocked(useUser).mockReturnValue({
+    isLoading: false,
+    isError: false,
+    data: { username: 'Test', avatar_url: null },
+  });
 });
 
 const setActiveConvo = vi.fn();
@@ -50,37 +53,12 @@ describe('MessageList', () => {
     expect(listItems.length).toBeGreaterThan(0);
   });
 
-  it('should call api when conversation has been changed', () => {
-    const { rerender } = render(
-      <ChatContext.Provider value={context}>
-        <MessageList />
-      </ChatContext.Provider>
-    );
-
-    rerender(
-      <ChatContext.Provider
-        value={{
-          activeConvo: conversations[1],
-          setActiveConvo,
-        }}
-      >
-        <MessageList />
-      </ChatContext.Provider>
-    );
-
-    const futureEndpoint = `conversations/${conversations[1].id}/messages`;
-    expect(doFetch).toBeCalledWith(futureEndpoint);
-  });
-
   it('should show loading spinner', () => {
-    useApi.mockImplementation(() => [
-      {
-        isLoading: true,
-        isError: false,
-        data: [],
-      },
-      doFetch,
-    ]);
+    vi.mocked(useMessages).mockReturnValue({
+      isLoading: true,
+      isError: false,
+      data: [],
+    });
 
     render(
       <ChatContext.Provider value={context}>
@@ -92,14 +70,11 @@ describe('MessageList', () => {
   });
 
   it('should show fail sign when api error occures', () => {
-    useApi.mockImplementation(() => [
-      {
-        isLoading: false,
-        isError: true,
-        data: [],
-      },
-      doFetch,
-    ]);
+    vi.mocked(useMessages).mockReturnValue({
+      isLoading: false,
+      isError: true,
+      data: [],
+    });
 
     render(
       <ChatContext.Provider value={context}>

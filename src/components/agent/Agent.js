@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Typography from '@mui/material/Typography';
-import { useApi } from '../../hooks';
+import { useUser } from '../../hooks/useUser';
 
 const AgentContainer = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -39,13 +38,7 @@ const StyledBadge = styled(Badge)({
  * @param {boolean} props.isAvatar If true, show just an avatar
  */
 export const Agent = ({ userId, unreadCount, isAvatar, ...props }) => {
-  const endpoint = `users/${userId}`;
-  const [{ data, isLoading, isError }, doFetch] = useApi(endpoint, {});
-
-  useEffect(() => {
-    // Update user info when used as an active conversation indicator
-    doFetch(endpoint);
-  }, [endpoint, doFetch]);
+  const { data, isLoading, isError } = useUser(userId);
 
   // John Doe until fetched, nothing personal
   const doe = { avatar_url: null, username: '' };

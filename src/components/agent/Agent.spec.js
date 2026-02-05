@@ -1,43 +1,24 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useApi } from '../../hooks';
+import { useUser } from '../../hooks/useUser';
 import { Agent } from './Agent';
 import user from '../../__mocks__/user.json';
-import users from '../../__mocks__/users.json';
 
-vi.mock('../../hooks');
-
-const doFetch = vi.fn();
+vi.mock('../../hooks/useUser');
 
 beforeEach(() => {
-  useApi.mockImplementation(() => [
-    {
-      isLoading: false,
-      isError: false,
-      data: user,
-    },
-    doFetch,
-  ]);
+  vi.mocked(useUser).mockReturnValue({
+    isLoading: false,
+    isError: false,
+    data: user,
+  });
 });
 
 describe('Agent', () => {
   it('renders without crashing', () => {
     render(<Agent userId={user.id} />);
     expect(screen.getByRole('img')).toBeInTheDocument();
-  });
-
-  it('should call api with provided user id', () => {
-    render(<Agent userId={user.id} />);
-    expect(doFetch).toBeCalledWith(`users/${user.id}`);
-  });
-
-  it('should call api when user id have been changed', () => {
-    const { rerender } = render(<Agent userId={user.id} />);
-    rerender(<Agent userId={users[0].id} />);
-
-    const futureEndpoint = `users/${users[0].id}`;
-    expect(doFetch).toBeCalledWith(futureEndpoint);
   });
 
   it('should not show badge by default', () => {
@@ -56,57 +37,33 @@ describe('Agent', () => {
   });
 
   it('should show username', () => {
-    useApi.mockImplementation(() => [
-      {
-        isLoading: false,
-        isError: false,
-        data: user,
-      },
-      doFetch,
-    ]);
-
     render(<Agent userId={user.id} />);
     expect(screen.getByText('Amy')).toBeInTheDocument();
   });
 
   it('should show empty user name while loading', () => {
-    useApi.mockImplementation(() => [
-      {
-        isLoading: true,
-        isError: false,
-        data: [],
-      },
-      doFetch,
-    ]);
+    vi.mocked(useUser).mockReturnValue({
+      isLoading: true,
+      isError: false,
+      data: undefined,
+    });
 
     render(<Agent userId={user.id} />);
     expect(screen.queryByText('Amy')).not.toBeInTheDocument();
   });
 
   it('should show empty user name on error', () => {
-    useApi.mockImplementation(() => [
-      {
-        isLoading: false,
-        isError: true,
-        data: [],
-      },
-      doFetch,
-    ]);
+    vi.mocked(useUser).mockReturnValue({
+      isLoading: false,
+      isError: true,
+      data: undefined,
+    });
 
     render(<Agent userId={user.id} />);
     expect(screen.queryByText('Amy')).not.toBeInTheDocument();
   });
 
   it('should show only avatar when requested', () => {
-    useApi.mockImplementation(() => [
-      {
-        isLoading: false,
-        isError: false,
-        data: user,
-      },
-      doFetch,
-    ]);
-
     render(<Agent userId={user.id} isAvatar />);
     expect(screen.queryByText('Amy')).not.toBeInTheDocument();
     expect(screen.getByRole('img')).toBeInTheDocument();
