@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import { useConversations } from '../../hooks/useConversations';
 import { useMarkConversationRead } from '../../hooks/useMarkConversationRead';
 import { convosFormatter } from '../../formatters/convosFormatter';
@@ -30,22 +31,22 @@ export const AgentList: React.FC = () => {
   ) : (
     <List>
       {convos.map((convo) => (
-        <ListItem
-          button
-          key={convo.id}
-          selected={activeConvo !== false && convo.id === activeConvo.id}
-          onClick={() => {
-            setActiveConvo(convo);
-            // Mark conversation as read if it has unread messages
-            if (convo.unread_message_count > 0) {
-              markAsRead.mutate(convo.id);
-            }
-          }}
-        >
-          <Agent
-            unreadCount={convo.unread_message_count}
-            userId={convo.with_user_id}
-          />
+        <ListItem key={convo.id} disablePadding>
+          <ListItemButton
+            selected={activeConvo !== false && convo.id === activeConvo.id}
+            onClick={() => {
+              setActiveConvo(convo);
+              // Mark conversation as read if it has unread messages
+              if (convo.unread_message_count > 0) {
+                markAsRead.mutate(convo.id);
+              }
+            }}
+          >
+            <Agent
+              unreadCount={convo.unread_message_count}
+              userId={convo.with_user_id}
+            />
+          </ListItemButton>
         </ListItem>
       ))}
     </List>
