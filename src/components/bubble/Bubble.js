@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { StyledBubble } from './useStyles';
+import { StyledBubble } from './StyledBubble';
 
 /**
  * Bubble-style message body frame component
