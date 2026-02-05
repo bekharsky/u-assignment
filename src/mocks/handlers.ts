@@ -1,36 +1,76 @@
 import { http, HttpResponse } from 'msw';
+import Chance from 'chance';
 import type { User, Conversation, Message } from '../types';
-import usersData from '../__mocks__/users.json';
-import conversationsData from '../__mocks__/conversations.json';
-import messagesData from '../__mocks__/messages.json';
 
 const API_BASE =
   import.meta.env.VITE_API || 'https://ui-developer-backend.herokuapp.com/api';
 
-const users = usersData as User[];
-// Store conversations in a mutable array to simulate state changes
-let conversations = [...(conversationsData as Conversation[])];
-// Transform messages data to match our Message type (from_user_id -> user_id)
-const messages = messagesData.map((msg: any) => ({
-  id: msg.id,
-  conversation_id: msg.conversation_id,
-  user_id: msg.from_user_id,
-  body: msg.body,
-  created_at: msg.created_at,
-})) as Message[];
+// Initialize Chance with a fixed seed for consistent data
+const chance = new Chance(42);
 
-// Generate SVG avatar with initials
+// Generate users with Chance
+const generateUsers = (count: number): User[] => {
+  return Array.from({ length: count }, (_, i) => {
+    const id = String(i + 1);
+    return {
+      id,
+      username: chance.first(),
+      avatar_url: `/avatars/${id}.svg`,
+    };
+  });
+};
+
+// Generate conversations with Chance
+const generateConversations = (userCount: number): Conversation[] => {
+  return Array.from({ length: userCount - 1 }, (_, i) => {
+    const id = String(i + 1);
+    return {
+      id,
+      with_user_id: String(i + 2),
+      unread_message_count: i === 0 ? 1 : 0,
+    };
+  });
+};
+
+// Generate messages with Chance
+const generateMessages = (conversations: Conversation[]): Message[] => {
+  const allMessages: Message[] = [];
+  let messageId = 1;
+
+  conversations.forEach((conv) => {
+    const messageCount = chance.integer({ min: 2, max: 5 });
+    const baseTime = chance.date({
+      year: 2016,
+      month: 7, // August (0-indexed)
+    });
+
+    for (let i = 0; i < messageCount; i++) {
+      const isCurrentUser = chance.bool();
+      const timeOffset = i * 60000; // 1 minute apart
+
+      allMessages.push({
+        id: String(messageId++),
+        conversation_id: conv.id,
+        user_id: isCurrentUser ? '1' : conv.with_user_id,
+        body: chance.sentence({ words: chance.integer({ min: 3, max: 15 }) }),
+        created_at: new Date((baseTime instanceof Date ? baseTime : new Date(baseTime)).getTime() + timeOffset).toISOString(),
+      });
+    }
+  });
+
+  return allMessages;
+};
+
+const users = generateUsers(6);
+// Store conversations in a mutable array to simulate state changes
+const conversations = generateConversations(users.length);
+const messages = generateMessages(conversations);
+
+// Generate SVG avatar with initials using Chance for colors
 function generateAvatar(userId: string, username: string): string {
-  const colors = [
-    '#FF6B6B',
-    '#4ECDC4',
-    '#45B7D1',
-    '#FFA07A',
-    '#98D8C8',
-    '#F7DC6F',
-    '#BB8FCE',
-    '#85C1E2',
-  ];
+  const seed = parseInt(userId) || 0;
+  const userChance = new Chance(seed);
+  const color = userChance.color({ format: 'hex' });
 
   const initials = username
     .split(' ')
@@ -38,8 +78,6 @@ function generateAvatar(userId: string, username: string): string {
     .join('')
     .toUpperCase()
     .substring(0, 2);
-
-  const color = colors[parseInt(userId) % colors.length];
 
   const svg = `
     <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">

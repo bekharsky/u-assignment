@@ -37,7 +37,7 @@ describe('Agent', () => {
   it('should show username', async () => {
     renderWithQueryClient(<Agent userId={user.id} />);
     await waitFor(() => {
-      expect(screen.getByText('Amy')).toBeInTheDocument();
+      expect(screen.getByText('Pearl')).toBeInTheDocument();
     });
   });
 
@@ -46,6 +46,6 @@ describe('Agent', () => {
     await waitFor(() => {
       expect(screen.getByRole('img')).toBeInTheDocument();
     });
-    expect(screen.queryByText('Amy')).not.toBeInTheDocument();
+    expect(screen.queryByText('Pearl')).not.toBeInTheDocument();
   });
 });

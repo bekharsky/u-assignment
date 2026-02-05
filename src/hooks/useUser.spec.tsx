@@ -3,7 +3,6 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, it, expect } from 'vitest';
 import { useUser } from './useUser';
-import user from '../__mocks__/user.json';
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -38,7 +37,8 @@ describe('useUser', () => {
     });
 
     expect(result.current.data).toBeDefined();
-    expect(result.current.data!.username).toBe('Amy');
-    expect(result.current.data).toEqual(user);
+    expect(result.current.data!.username).toBe('Pearl');
+    expect(result.current.data!.id).toBe('2');
+    expect(result.current.data!.avatar_url).toBe('/avatars/2.svg');
   });
 });

@@ -5,3 +5,4 @@ coverage
 .vscode
 .idea
 *.log
+public/mockServiceWorker.js
