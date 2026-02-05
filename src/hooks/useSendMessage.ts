@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Message } from '../types';
-import { apiClient } from '../lib/apiClient';
+import { MessageSchema } from '../types';
+import { apiClient, parseResponse } from '../lib/apiClient';
 
 interface SendMessageParams {
   conversationId: string;
@@ -23,7 +24,7 @@ export const useSendMessage = () => {
           user_id: params.userId,
         }
       );
-      return response.data;
+      return parseResponse(response, MessageSchema);
     },
     onSuccess: (data, variables) => {
       // Invalidate messages query to refetch and show the new message

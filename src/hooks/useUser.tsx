@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { User } from '../types';
-import { apiClient } from '../lib/apiClient';
+import { UserSchema } from '../types';
+import { apiClient, parseResponse } from '../lib/apiClient';
 
 /**
  * Fetch user data from the API
@@ -8,14 +9,8 @@ import { apiClient } from '../lib/apiClient';
  * @returns {Promise} Axios response with user data
  */
 const fetchUser = async (userId: string): Promise<User> => {
-  const { data } = await apiClient.get<User>(`/users/${userId}`);
-
-  // Invalid requests results in an XML with code 200
-  if (typeof data === 'string') {
-    throw new Error('Not valid response');
-  }
-
-  return data;
+  const response = await apiClient.get(`/users/${userId}`);
+  return parseResponse(response, UserSchema);
 };
 
 /**

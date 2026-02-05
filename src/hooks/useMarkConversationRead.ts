@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { Conversation } from '../types';
-import { apiClient } from '../lib/apiClient';
+import { ConversationSchema } from '../types';
+import { apiClient, parseResponse } from '../lib/apiClient';
 
 /**
  * Mark a conversation as read (set unread_message_count to 0)
@@ -13,7 +14,7 @@ export const useMarkConversationRead = () => {
       const response = await apiClient.patch(
         `/conversations/${conversationId}/read`
       );
-      return response.data;
+      return parseResponse(response, ConversationSchema);
     },
     onSuccess: () => {
       // Invalidate conversations query to refetch and update the UI

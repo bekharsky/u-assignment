@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
+import FormHelperText from '@mui/material/FormHelperText';
+import { z } from 'zod';
 import { useSendMessage } from '../../hooks/useSendMessage';
 import { ChatContext } from '../../contexts/ChatContext';
 
@@ -20,26 +22,43 @@ const StyledFormControl = styled(FormControl)({
   flexGrow: 1,
 });
 
+// Zod schema for message validation
+const messageSchema = z
+  .string()
+  .min(1, 'Message cannot be empty')
+  .max(5000, 'Message is too long (max 5000 characters)');
+
 /**
  * Message composition form component
  * @param {Object} props React props
  */
 export const TextComposer: React.FC = () => {
   const [message, setMessage] = useState('');
+  const [validationError, setValidationError] = useState<string | null>(null);
   const { activeConvo } = useContext(ChatContext);
   const sendMessage = useSendMessage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!message.trim() || !activeConvo) {
+    // Validate with Zod
+    const result = messageSchema.safeParse(message.trim());
+
+    if (!result.success) {
+      setValidationError(result.error.errors[0].message);
       return;
     }
+
+    if (!activeConvo) {
+      return;
+    }
+
+    setValidationError(null);
 
     sendMessage.mutate(
       {
         conversationId: activeConvo.id,
-        body: message,
+        body: message.trim(),
         userId: '1', // Current user ID
       },
       {
@@ -58,27 +77,42 @@ export const TextComposer: React.FC = () => {
     // Shift+Enter will naturally insert a new line
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value);
+    // Clear validation error when user starts typing
+    if (validationError) {
+      setValidationError(null);
+    }
+  };
+
+  const isDisabled = !activeConvo || sendMessage.isPending;
+  const hasError = !!validationError;
+
   return (
     <StyledPaper>
       <form onSubmit={handleSubmit}>
         <Grid container alignItems="center">
-          <StyledFormControl>
+          <StyledFormControl error={hasError}>
             <Input
               placeholder="Type a message..."
               disableUnderline={true}
               fullWidth={true}
               multiline
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={handleChange}
               onKeyDown={handleKeyDown}
-              disabled={!activeConvo || sendMessage.isPending}
+              disabled={isDisabled}
+              error={hasError}
             />
+            {validationError && (
+              <FormHelperText error>{validationError}</FormHelperText>
+            )}
           </StyledFormControl>
 
           <IconButton
             color="primary"
             type="submit"
-            disabled={!message.trim() || !activeConvo || sendMessage.isPending}
+            disabled={!message.trim() || isDisabled}
           >
             <SendIcon />
           </IconButton>

@@ -1,20 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import type { Conversation } from '../types';
-import { apiClient } from '../lib/apiClient';
+import { ConversationsArraySchema } from '../types';
+import { apiClient, parseResponse } from '../lib/apiClient';
 
 /**
  * Fetch conversations from the API
  * @returns {Promise} Axios response with conversations data
  */
 const fetchConversations = async (): Promise<Conversation[]> => {
-  const { data } = await apiClient.get<Conversation[]>('/conversations');
-
-  // Invalid requests results in an XML with code 200
-  if (typeof data === 'string') {
-    throw new Error('Not valid response');
-  }
-
-  return data;
+  const response = await apiClient.get('/conversations');
+  return parseResponse(response, ConversationsArraySchema);
 };
 
 /**
