@@ -55,6 +55,27 @@ export const successHandlers = [
     return new HttpResponse(null, { status: 404 });
   }),
 
+  // Send a message to a conversation
+  http.post(
+    `${API_BASE}/conversations/:conversationId/messages`,
+    async ({ params, request }) => {
+      await delay(300);
+      const conversationId = params.conversationId as string;
+      const body = (await request.json()) as { body: string; user_id: string };
+
+      const newMessage: Message = {
+        id: String(messages.length + 1),
+        conversation_id: conversationId,
+        user_id: body.user_id,
+        body: body.body,
+        created_at: new Date().toISOString(),
+      };
+
+      messages.push(newMessage);
+      return HttpResponse.json(newMessage, { status: 201 });
+    }
+  ),
+
   // Mark conversation as read
   http.patch(
     `${API_BASE}/conversations/:conversationId/read`,
