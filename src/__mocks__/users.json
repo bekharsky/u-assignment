@@ -2,31 +2,31 @@
   {
     "id": "1",
     "username": "John",
-    "avatar_url": "http://placekitten.com/g/300/300"
+    "avatar_url": "/avatars/1.svg"
   },
   {
     "id": "2",
     "username": "Amy",
-    "avatar_url": "http://placekitten.com/g/301/301"
+    "avatar_url": "/avatars/2.svg"
   },
   {
     "id": "3",
     "username": "Jeremy",
-    "avatar_url": "http://placekitten.com/g/302/302"
+    "avatar_url": "/avatars/3.svg"
   },
   {
     "id": "4",
     "username": "Hannah",
-    "avatar_url": "http://placekitten.com/g/303/303"
+    "avatar_url": "/avatars/4.svg"
   },
   {
     "id": "5",
     "username": "Charles",
-    "avatar_url": "http://placekitten.com/g/304/304"
+    "avatar_url": "/avatars/5.svg"
   },
   {
     "id": "6",
     "username": "George",
-    "avatar_url": "http://placekitten.com/g/305/305"
+    "avatar_url": "/avatars/6.svg"
   }
 ]

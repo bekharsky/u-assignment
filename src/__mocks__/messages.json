@@ -1,5 +1,19 @@
 [
   {
+    "id": "1",
+    "conversation_id": "1",
+    "body": "Hey! How are you?",
+    "from_user_id": "2",
+    "created_at": "2016-08-23T10:10:00.670Z"
+  },
+  {
+    "id": "2",
+    "conversation_id": "1",
+    "body": "I'm doing great, thanks! What about you?",
+    "from_user_id": "1",
+    "created_at": "2016-08-23T10:11:00.670Z"
+  },
+  {
     "id": "3",
     "conversation_id": "3",
     "body": "Hi!",
@@ -7,10 +21,38 @@
     "created_at": "2016-08-23T10:15:00.670Z"
   },
   {
+    "id": "4",
+    "conversation_id": "2",
+    "body": "Did you finish the project?",
+    "from_user_id": "3",
+    "created_at": "2016-08-23T10:12:00.670Z"
+  },
+  {
+    "id": "5",
+    "conversation_id": "2",
+    "body": "Yes, just submitted it!",
+    "from_user_id": "1",
+    "created_at": "2016-08-23T10:13:00.670Z"
+  },
+  {
+    "id": "6",
+    "conversation_id": "4",
+    "body": "Want to grab lunch?",
+    "from_user_id": "5",
+    "created_at": "2016-08-23T10:16:00.670Z"
+  },
+  {
     "id": "7",
     "conversation_id": "3",
     "body": "Waddap!",
     "from_user_id": "4",
     "created_at": "2016-08-23T10:14:00.670Z"
+  },
+  {
+    "id": "8",
+    "conversation_id": "5",
+    "body": "See you tomorrow!",
+    "from_user_id": "6",
+    "created_at": "2016-08-23T10:17:00.670Z"
   }
 ]
